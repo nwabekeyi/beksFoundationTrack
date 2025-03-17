@@ -1,0 +1,152 @@
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&family=Lora:ital,wght@0,400..700;1,400..700&display=swap');
+
+:root {
+    --bg-color: #fdfdfb;
+    --primary-color: #8d928e;
+}
+
+/* font family "lora" is used*/
+.lora-text {
+    font-family: "Lora", serif;
+    font-optical-sizing: auto;
+    font-weight: 400; 
+    font-style: normal;
+  }
+
+  * {
+    margin: 0%;
+    padding: 0%;
+    box-sizing: border-box;
+    text-decoration: none;
+  }
+
+  body {
+    background-color: var(--bg-color);
+    font-family: "lora", serif;
+  }
+  /*for all the paragraph element in the body*/
+  p {
+    color: var(--primary-color);
+    font-size: large;
+  }
+
+
+  header {
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    padding: 1rem 0rem 0rem 0rem;
+  }
+
+  .logo>span {
+    font-style: bold;
+    font-weight: 700;
+  }
+  nav > a {
+    justify-content: space-between;
+    padding-inline: 1rem;
+    color: var(--primary-color);
+  }
+
+  #signUp {
+    border: 0.1rem solid var(--primary-color);
+    padding: 0.2rem 0.7rem;
+  }
+
+  main {
+    padding: 10rem 0rem 0rem 0rem;
+  }
+
+  #SectionContainer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    text-align: start;
+  }
+
+  #DivContainer {
+    display: flex;
+  }
+
+  #text-container {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem; /* More modern approach */
+    padding-inline-start: 10rem; /* Adjusted */
+}
+
+
+  #text-container span {
+    margin-block-end: 3rem;
+    font-weight: 300;
+    font-size: xx-large;
+    color: var(--primary-color);
+    display: block;
+  }
+  .for-CompDev {
+    display: block;
+    padding-inline-end: 3rem;
+  }
+
+  .for-CompDev > h3 {
+    margin-block-end: 1rem;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .for-CompDev > a {
+    display: inline-block;
+    margin-block-start: 1rem;
+    text-align: center;
+    padding: 0.7rem;
+    border-radius: 0.2rem;
+    font-weight: 500;
+    box-shadow: 4px 4px 5px rgba(255, 255, 255, 0.6);
+
+
+  }
+
+  #Comp-SignUp {
+    background-color: #10a810;
+    color: #fff;
+  }
+
+  #Dev-SignUp {
+    color: #10a810;
+    background-color: #fff;
+    border: #10a810 0.1rem solid;
+  }
+
+
+
+
+@media screen and (min-width: 1024px) {
+    .for-CompDev > a {
+        display: inline-block;
+        margin-block-start: 1rem;
+        text-align: center;
+        padding: 0.4rem;
+        width: 11rem;
+        border-radius: 0.2rem;
+        font-weight: 500;
+        box-shadow: 4px 4px 5px rgba(255, 255, 255, 0.6);
+    
+    
+      }
+}
+@media screen  and (min-width: 1025px) and (max-width: 1270px) {
+    .for-CompDev > a {
+        display: inline-block;
+        margin-block-start: 1rem;
+        text-align: center;
+        padding: 0.4rem;
+        width: 13rem;
+        border-radius: 0.2rem;
+        font-weight: 500;
+        box-shadow: 4px 4px 5px rgba(255, 255, 255, 0.6);
+    
+    
+      }
+}
+
+
