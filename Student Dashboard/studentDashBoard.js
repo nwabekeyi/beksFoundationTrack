@@ -77,8 +77,18 @@ function loadLessons(lessons) {
 
         // Add padlock icon based on currentTopicId
         const padlockIcon = lesson.id <= currentTopicId
-            ? '<iconify-icon icon="mdi:lock-open-outline" class="padlock-icon"></iconify-icon>'
+            ? '<iconify-icon icon="mdi:lock-open-outline" data-current="current" class="padlock-icon"></iconify-icon>'
             : '<iconify-icon icon="mdi:lock-outline" class="padlock-icon"></iconify-icon>';
+
+            //changing the padlock icon for currenttopic to white
+            const currentTopicIcon = document.querySelector('[data-current="current"]');
+            console.log(currentTopicIcon);
+            if(currentTopicIcon){
+                currentTopicIcon.style.color = '#fff';
+
+            }
+
+           
 
         // Block topics with IDs greater than currentTopicId
         if (lesson.id > currentTopicId) {

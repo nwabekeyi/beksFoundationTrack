@@ -143,8 +143,8 @@ h1 {
 }
 
 .active-topic {
-    background-color: #1abc9c; 
-    color: white;
+    background-color: #6b48ff !important; 
+    color: white !important;
     border-left: 4px solid #16a085; 
     font-weight: bold;
     padding: 10px;
@@ -269,5 +269,5 @@ progress::-moz-progress-bar {
 }
 
 .active {
-    background-color: #d1e7dd;
+    background-color: #000;
 }
