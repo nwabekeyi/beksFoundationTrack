@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Page</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"> 
+    <link rel="stylesheet" href="style.css"> 
+</head>
+<body>
+    <form action="" class="form">
+        <div class="formdiv">
+            <div class="login">
+                <h2>Login</h2>
+                <div class="label">
+                    <label for="email">Email</label><br>
+                    <input type="email" id="email" required placeholder="Enter your email:" class="input"><br>
+
+                    <a href="Signup.html" class="forgot">Forgot Password?</a><br>
+            
+                    <label for="password">Password</label><br>
+                    <div class="password-container">
+                        <input type="password" id="password" required placeholder="Password:" class="input">
+                        <span class="toggle-password" onclick="togglePasswordVisibility()">
+                            <i class="fas fa-eye"></i> 
+                        </span>
+                    </div><br>
+
+                    <label for="role">Role</label><br>
+                    <select id="role" required class="input">
+                        <option value="student">Student</option>
+                        <option value="admin">admin</option>
+                    </select><br>
+            
+                    <label for="remember" class="remember">
+                        <input type="checkbox" id="remember"> Remember me
+                    </label><br>
+            
+                    <button type="submit">Login</button>
+
+                    <h3>Don't have an account? <a href="Signup.html"><span>Sign up</span></a></h3>
+                </div>
+            </div>
+
+            <div class="img"></div>
+        </div>
+    </form>
+
+    <script src="index.js"></script>
+</body>
+</html>
