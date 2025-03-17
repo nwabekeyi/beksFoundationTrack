@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registration Form</title>
+    <link rel="stylesheet" href="registrationForm.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+
+</head>
+<body>
+    <div class="register-container">
+        <div class="modal-content">
+            <div class="modal-left">
+                <h2>Beks Coding Club Foundation Track</h2>
+                <p>Are you ready to take your first step into the world of coding? The Foundation Track at Beks Coding Club is designed for beginners who want to build a strong foundation in programming. Whether you're a complete novice or looking to refresh your skills, this track will guide you through the essentials of coding in a fun and interactive way....</p>
+                <p>Unlock Your Coding Potential!</p>
+
+                <button class="have-account-btn" onclick="window.location.href=''">HAVE AN ACCOUNT?</button>
+            </div>
+
+            <div class="modal-right">
+                <h2>Registration Form</h2>
+                <form id="register-form" onsubmit="handleRegister(event)">
+                    <div class="form-row">
+                        <input type="text" id="first-name" placeholder="First Name" required>
+                        <input type="text" id="last-name" placeholder="Last Name" required>
+                    </div>
+
+                    <input type="email" id="email" placeholder="Email" required>
+                    <div class="form-row">
+                        <input type="password" id="password" placeholder="Password" required>
+                        <input type="password" id="confirm-password" placeholder="Confirm Password" required>
+                    </div>
+                    <div class="form-row">
+                        <label>
+                            <input type="checkbox" id="terms" required>I've read & agree to the Terms and Conditions
+                            </label>
+                    </div>
+                    <button type="submit" class="register-btn">Register</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+</body>
+<script src="registrationForm.js"></script>
+</html>
