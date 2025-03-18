@@ -140,6 +140,7 @@ h1 {
 
 .sign-up-code-btn:hover {
   background: linear-gradient(to right, #5a3ee0, #8462c9);
+  color: #fff;
 }
 
 .illustration-section {
