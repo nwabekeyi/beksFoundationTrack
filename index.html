@@ -3,40 +3,43 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Beks Coding Club</title>
-    <link rel="stylesheet" href="beks.css">
-    <link rel="shortcut icon" href="assets/beksIMG-removebg-preview.png" type="image/x-icon">
+    <title>Beks Coding - Matching Developers with Great Companies</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="index.css">
 </head>
 <body>
     <header>
-        <div class="logo"><span>Beks Coding Club</span></div>
-        <nav>
-            <a href="#" id="login">Login</a>
-            <a href="#" id="signUp">Sign up</a>
-        </nav>
+        <div class="header-left">
+            <h1><strong>Beks Coding Club</strong></h1>
+        </div>
+        <div class="header-right">
+            <a href="" class="nav-btn login-btn" onclick="handleLogin()">Login</a>
+            <button class="nav-btn sign-up-btn">Sign Up</button>
+        </div>
     </header>
     <main>
-        <div id="SectionContainer">
-            <section id="text-container">
-                <span>Matching developers <br> with great companies.</span>
-                <div id="DivContainer">
-                    <div class="for-CompDev">
-                        <h3>For Companies</h3>
-                        <p>We are the market-leading technical interview platform to identify and hire developers with the right skill.</p>
-                        <a href="#" id="Comp-SignUp">Start Remote Hiring</a>
-                    </div>
-                    <div class="for-CompDev">
-                        <h3>For developers</h3>
-                        <p>Join over 11 million developers, practice coding skills, prepare for interviews, and get hired.</p>
-                        <a href="#" id="Dev-SignUp">Sign Up & Code</a>
-                    </div>
-                </div>
-            </section>
-            <section id="image-container">
-                <img src="assets/beksIMG-removebg-preview.png" alt="illustration of developers">
-            </section>
+        <h1>Novice To Experts With Beks Coding Club</h1>
+        <div class="content">
+            <div class="text-section">
+                <h2>For Novice</h2>
+                <p>Start your coding journey with beginner-friendly lessons and hands-on projects to build your skills from scratch.</p>
+                <button class="action-btn see-brochure-btn">See Brochure</button>
+            </div>
+            <div class="section developers">
+                <h2>For Intermediates</h2>
+                <p>Join over 11 million developers, practice coding skills, prepare for interviews, and get hired.</p>
+                <button class="action-btn sign-up-code-btn" onclick="window.location.href='register/register.html'">Sign Up & Code</button>
+            </div>
+            <div class="illustration-section">
+                <img src="https://img.freepik.com/premium-vector/multinational-business-team_171919-1385.jpg">
+            </div>
         </div>
+        </div>
+        
     </main>
+    <footer>
+        <p>Copyright © 2025 Beks Coding Club | <a href="#">Careers</a> | <a href="#">Privacy Policy</a></p>
+    </footer>
+    <script src="index.js"></script>
 </body>
 </html>
