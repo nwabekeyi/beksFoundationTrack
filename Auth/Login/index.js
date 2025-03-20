@@ -2,14 +2,6 @@
 import { showLoader } from "../../utils/loader.js";
 import { createModal } from "../../utils/modal.js";
 
-    createModal({
-        title: "Login response",
-        message:"Failed to parse user details. Please try again.",
-        noConfirm: true
-    }
-    )
-
-
 function togglePasswordVisibility() {
     console.log("Toggle function called"); // Debugging log
 

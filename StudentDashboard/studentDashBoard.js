@@ -1,6 +1,5 @@
 import { getSessionData } from "../utils/getSessionData.js";
 
-createOpenDialogButton()
 const userDetails = getSessionData('userDetails');
 console.log(userDetails)
 
