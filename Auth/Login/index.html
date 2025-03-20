@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Page</title>
+    <!-- External Libraries -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="navbar-content">
+            <button class="nav-btn sign-up-btn">Sign Up</button>
+        </div>
+    </nav>
+
+    <div class="form-container">
+        <div class="form-wrapper">
+            <!-- Login Form -->
+            <div class="login-form">
+                <h2>Login</h2>
+                <form id="loginForm">
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <input type="email" id="email" class="form-input" placeholder="Enter your email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="password">Password</label>
+                        <div class="password-container">
+                            <input type="password" id="password" class="form-input" placeholder="Password" required>
+                            <span class="toggle-password" onclick="togglePasswordVisibility()">
+                                <i class="fas fa-eye"></i>
+                            </span>
+                        </div>
+                        <a href="#" class="forgot-password">Forgot Password?</a>
+                    </div>
+                    <div class="form-group">
+                        <label for="role">Role</label>
+                        <select id="role" class="form-input" required>
+                            <option value="student">Student</option>
+                            <option value="admin">Admin</option>
+                        </select>
+                    </div>
+                    <div class="remember-me">
+                        <input type="checkbox" id="remember">
+                        <label for="remember">Remember me</label>
+                    </div>
+                    <button type="submit" class="submit-button">Login</button>
+                </form>
+                <p class="signup-link">Don’t have an account? <a href="#">Sign up</a></p>
+            </div>
+
+            <!-- Carousel Section -->
+            <div class="carousel">
+                <div class="swiper">
+                    <div class="swiper-wrapper">
+                        <!-- Slide 1 -->
+                        <div class="swiper-slide" style="background-image: url('https://static.vecteezy.com/system/resources/previews/056/821/258/non_2x/transparent-concept-of-a-puzzled-man-with-question-marks-free-png.png');">
+                            <div class="slide-content">
+                                <h2>Welcome to Beks Coding Club</h2>
+                                <p>Are you a beginner just dipping your toes into the world of programming</p>
+                            </div>
+                        </div>
+                        <!-- Slide 2 -->
+                        <div class="swiper-slide" style="background-image: url('https://png.pngtree.com/png-vector/20231213/ourmid/pngtree-sitting-male-programmer-using-laptop-png-image_11331360.png');">
+                            <div class="slide-content">
+                                <h2>Code Enthusiasts</h2>
+                                <p>a seasoned coder looking to sharpen your skills</p>
+                            </div>
+                        </div>
+                        <!-- Slide 3 -->
+                        <div class="swiper-slide" style="background-image: url('https://img.freepik.com/premium-vector/multinational-business-team_171919-1385.jpg');">
+                            <div class="slide-content">
+                                <h2>Explore New Skills With Beks</h2>
+                                <p>Find new opportunities and grow your skills with our platform.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Pagination -->
+                    <div class="swiper-pagination"></div>
+                    <!-- Scrollbar -->
+                    <div class="swiper-scrollbar"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <p>Copyright © 2025 Beks Coding Club | <a href="#">Careers</a> | <a href="#">Privacy Policy</a></p>
+        </div>
+    </footer>
+
+    <!-- External Scripts -->
+    <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+    <script src="index.js"></script>
+</body>
+</html>

@@ -1,64 +1,31 @@
-// Handle login functionality
-async function handleLogin() {
-    try {
-        // Replace prompts with a proper login form in production
-        const email = email('Enter your email:');
-        const password = password('Enter your password:');
-        const role = role('Enter your role')
-
-        // Validate inputs
-        if (!email || !password) {
-            alert('Please enter both email and password.');
-            return;
-        }
-
-        // Send login request to the backend API
-        const response = await fetch('https://bekcodingclub-server.onrender.com/auth/login', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                email,
-                password,
-                role,
-            }),
-        });
-
-        // Handle response
-        if (!response.ok) {
-            throw new Error(`HTTP error! Status: ${response.status}`);
-        }
-
-        const data = await response.json();
-
-        if (data.success) {
-            alert('Login successful! Redirecting to dashboard...');
-            window.location.href = '../../StudentDashboard/studentDashboard.html'; // Redirect to dashboard
-        } else {
-            throw new Error(data.message || 'Login failed.');
-        }
-    } catch (error) {
-        console.error('Login error:', error);
-        alert(`Login failed: ${error.message}`);
-    }
-}
-
-// Handle sign-up redirection (already handled in HTML)
-function handleSignUp() {
-    window.location.href = 'register/register.html';
-}
-
-// Attach event listeners when the DOM is fully loaded
-document.addEventListener('DOMContentLoaded', () => {
-    const loginButton = document.querySelector('.login-btn');
-    const signUpButton = document.querySelector('.sign-up-btn');
-
-    if (loginButton) {
-        loginButton.addEventListener('click', handleLogin);
-    }
-
-    if (signUpButton) {
-        signUpButton.addEventListener('click', handleSignUp);
-    }
-});
+const titles = [
+    "Novice To Experts With Beks Coding Club",
+    "Experts To Masters With Beks Coding Club",
+    "Masters To Pioneers With Beks Coding Club"
+  ];
+  
+  let currentIndex = 0;
+  const titleElement = document.getElementById("title");
+  
+  function updateTitle() {
+    // Fade out the current title
+    titleElement.style.opacity = 0;
+  
+    setTimeout(() => {
+      // Update the title after fade-out
+      currentIndex = (currentIndex + 1) % titles.length; // Loop through the titles
+      titleElement.textContent = titles[currentIndex];
+  
+      // Fade in the new title
+      titleElement.style.opacity = 1;
+    }, 2000); // Wait for 1 second (fade-out duration)
+  }
+  
+  // Automatically update the title when the page loads
+  window.onload = () => {
+    titleElement.style.opacity = 1; // Ensure the title is visible initially
+    setTimeout(updateTitle, 5000); // Wait 3 seconds before the first transition
+  };
+  
+  // Update the title every 5 seconds (loop continuously)
+  setInterval(updateTitle, 5000); // 5000 milliseconds = 5 seconds

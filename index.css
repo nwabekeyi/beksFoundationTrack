@@ -6,9 +6,7 @@
 }
 
 body {
-  background-color: #e8f0fe; /* Light blue background similar to HackerRank */
-  color: #333;
-  line-height: 1.6;
+  background: linear-gradient  color #333;
 }
 
 header {
@@ -80,6 +78,12 @@ h1 {
   font-family: cursive;
 }
 
+#title {
+  opacity: 1;
+  transition: opacity 1s ease-in-out; /* Smooth fade effect */
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5); /* Text shadow */
+}
+
 .content {
   display: flex;
   justify-content: center;
@@ -90,10 +94,14 @@ h1 {
 }
 
 .text-content {
-  flex: 1;
+  /* flex: 1; */
   display: flex;
   flex-direction: column;
-  gap: 40px;
+  padding: 1em 0.5em 1em 0.5em;
+  /* gap: 20px; */
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* Added box shadow */
+  align-content: center;
+  margin: auto;
 }
 
 .section {
@@ -110,10 +118,34 @@ h1 {
 .section p {
   font-size: 16px;
   color: #666;
+  margin-bottom: 5.5px;
+}
+
+.content-section {
+  margin-bottom: 30px;
+  opacity: 0; /* Start with hidden content */
+  transition: opacity 1s ease-in-out; /* Smooth fade-in and fade-out */
+}
+
+.content-section.visible {
+  opacity: 1; /* Show content */
+}
+
+.content-section h3 {
+  font-size: 24px;
+  font-weight: 600;
+  margin-bottom: 10px;
+}
+
+.content-section p {
+  font-size: 16px;
+  line-height: 1.6;
   margin-bottom: 20px;
 }
 
+
 .action-btn {
+  margin-top: 1.8em;
   padding: 10px 20px;
   border-radius: 5px;
   font-size: 14px;
@@ -126,6 +158,8 @@ h1 {
   background: linear-gradient(to right, #007bff, #007bff);
   color: white;
   border: none;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* Added box shadow */
+
 }
 
 .see-brochure-btn:hover {
@@ -136,6 +170,8 @@ h1 {
   background: none;
   color: #007bff;
   border: 1px solid #007bff;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* Added box shadow */
+
 }
 
 .sign-up-code-btn:hover {
