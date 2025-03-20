@@ -1,5 +1,13 @@
 // Toggle password visibility
 import { showLoader } from "../../utils/loader.js";
+import { createModal } from "../../utils/modal.js";
+
+    createModal({
+        title: "Login response",
+        message:"Failed to parse user details. Please try again.",
+        noConfirm: true
+    }
+    )
 
 
 function togglePasswordVisibility() {
@@ -62,7 +70,13 @@ async function fetchUserDetails(email) {
                 } catch (error) {
                     console.error("Failed to parse JSON:", error);
                     loader.remove();
-                    alert("Failed to parse user details. Please try again.");
+                    createModal({
+                        title: "Login response",
+                        message:"Failed to parse user details. Please try again.",
+                        onCancel: () => alert('Action canceled!'),
+                        noConfirm: true
+                    }
+                    )
                 }
             } else {
                 console.error("Failed to fetch user details:", response.statusText);

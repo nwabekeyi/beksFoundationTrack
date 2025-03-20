@@ -180,10 +180,10 @@ h1 {
     align-items: center;
     gap: 10px;
 }
-#course-progress-bar{
-    border: #1856B4 1px solid !important;
+/* #course-progress-bar{
+    border: #1856B4 0.002em solid !important;
 
-}
+} */
 
 .course-progress label {
     font-size: 14px;
