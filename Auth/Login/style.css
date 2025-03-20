@@ -1,67 +1,113 @@
+/* General Reset */
 * {
-    padding: 0;
     margin: 0;
+    padding: 0;
     box-sizing: border-box;
 }
 
 body {
-    background: linear-gradient(to bottom, blue 50%, lightskyblue 50% );
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(to bottom, #f5f5f5 50%, rgb(185, 212, 230) 50%); /* Changed blue to off-white (#f5f5f5) */    
+    min-height: 100vh;
+}
+
+#header .header-left{
+    height: 10%;
+    display: flex !important;
+    padding: 20px 3%;
+    align-items: center;
+}
+
+.header-left img{
+    width: 50px;
+    height: auto;
+}
+
+.header-left h1{
+    font-size: large;
+    margin-left: 10px;
+    color: #333333;
+
+}
+
+.main{
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100vh;
+    flex-direction: column;
+    margin-top: 3%;
 }
 
-.form {
-    width: 55%;
+.sign-up-btn {
+    background: linear-gradient(to right, #340df5, #3b17ec);
+    color: #fff;
+    text-decoration: none;
+    padding: 12px 20px; /* Add padding for better appearance */
+    border-radius: 4px; /* Add rounded corners */
+    transition: background 0.3s ease; /* Smooth hover transition */
+    border: none;
+}
+
+.sign-up-btn:hover {
+    background: linear-gradient(to right, #5a3ee0, #8462c9);
+}
+
+/* Form Container */
+.form-container {
+    width: 60%;
     background-color: whitesmoke;
     border-radius: 28px;
-    display: flex;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    display: flex;
+    /* margin-bottom: 20px; */
 }
 
-.formdiv {
+.form-wrapper {
     display: flex;
     width: 100%;
 }
 
-.login {
+/* Login Form */
+.login-form {
     width: 50%;
     padding: 20px;
     display: flex;
     flex-direction: column;
     justify-content: center;
-    background-color: whitesmoke;
 }
 
-.login h2 {
+.login-form h2 {
     text-align: center;
-    margin-bottom: 10px;
     font-size: 30px;
+    color: #333;
+    margin-bottom: 20px;
 }
 
-.label {
-    width: 80%;
-    margin: 0 auto;
-    margin-top: 20px;
+.form-group {
+    margin-bottom: 10px;
 }
 
-.login label {
-    font-size: 20px;
-    font-weight: bold;
-    font-family: sans-serif;
+.form-group label {
+    font-size: 16px;
+    font-weight: 500;
+    color: #333;
     margin-bottom: 8px;
     display: block;
 }
 
-.input {
+.form-input {
     width: 100%;
     height: 50px;
-    margin-bottom: 10px;
     padding: 10px;
     border: 1px solid #ccc;
     border-radius: 4px;
-    font-size: 20px;
+    font-size: 16px;
+    outline: none;
+}
+
+.form-input:focus {
+    border-color: #1856B4;
 }
 
 .password-container {
@@ -81,53 +127,136 @@ body {
     color: #333;
 }
 
-.forgot {
+.forgot-password {
     display: block;
     text-align: right;
-    font-size: 18px;
-    color: blue;
+    font-size: 14px;
+    color: #1856B4;
     text-decoration: none;
-    margin-bottom: 10px;
-}
-
-.remember {
-    display: flex;
-    align-items: center;
-    font-size: 16px;
-    margin-bottom: 10px;
-}
-
-button {
-    background-color: blue;
-    color: white;
-    width: 100%;
-    height: 40px;
-    border: none;
-    border-radius: 15px;
-    cursor: pointer;
-    font-size: 16px;
     margin-top: 10px;
 }
 
-button:hover {
-    background-color: darkblue;
+.remember-me {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
 }
 
-h3 {
+.remember-me label {
+    font-size: 14px;
+    margin-left: 8px;
+    color: #333;
+}
+
+.submit-button {
+    width: 100%;
+    height: 40px;
+    background-color: #1856B4;
+    color: white;
+    border: none;
+    border-radius: 15px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+button:hover, .login-btn:hover {
+    background-color: rgba(0, 0, 0, 0.1);
+    border: none;
+    color: #fff;
+  }
+
+.signup-link {
     text-align: center;
-    padding-top: 20px;
-    font-size: 20px;
+    margin-top: 20px;
+    font-size: 14px;
+    color: #333;
 }
 
-a, span {
+.signup-link a {
     color: blue;
     text-decoration: none;
 }
 
-.img {
+/* Carousel Section */
+.carousel {
     width: 50%;
-    background-image: url('img.jfif');
-    background-repeat: no-repeat;
-    background-size: cover;
-    border-radius: 20px;
+    height: 100%;
+    position: relative;
 }
+
+.swiper {
+    width: 100%;
+    height: 100%;
+}
+
+.swiper-slide {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-size: cover;
+    background-position: center;
+    position: relative;
+}
+
+.slide-content {
+    position: absolute;
+    bottom: 20px;
+    left: 20px;
+    color: white;
+    text-align: left;
+    background-color: rgba(0, 0, 0, 0.5);
+    padding: 20px;
+    border-radius: 10px;
+}
+
+.slide-content h2 {
+    font-size: 24px;
+    margin-bottom: 10px;
+}
+
+.slide-content p {
+    font-size: 16px;
+}
+
+/* Swiper Pagination */
+.swiper-pagination {
+    position: absolute;
+    bottom: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 10;
+}
+
+.swiper-pagination-bullet {
+    width: 10px;
+    height: 10px;
+    background-color: rgba(255, 255, 255, 0.5);
+    margin: 0 5px;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.swiper-pagination-bullet-active {
+    background-color: white;
+}
+
+footer {
+    text-align: center;
+    padding-top: 1.5em;
+    /* padding-bottom: 1em; */
+    background-color: transparent;
+    color: #666;
+    font-size: 12px;
+  }
+  
+  footer a {
+    color: #666;
+    text-decoration: none;
+    margin: 0 5px;
+  }
+  
+  footer a:hover {
+    text-decoration: underline;
+  }

@@ -98,7 +98,8 @@ async function handleLogin(event) {
             headers: {
                 "Content-Type": "application/json", 
             },
-            body: JSON.stringify(data), 
+            body: JSON.stringify(data),
+            mode: "no-cors"
         });
 
         if (response.ok) {
@@ -134,7 +135,7 @@ async function handleLogin(event) {
 }
 
 // Attach the login function to the form
-document.querySelector(".form").addEventListener("submit", handleLogin);
+document.querySelector("#loginForm").addEventListener("submit", handleLogin);
 
 // Fetch user details on page load (if token exists)
 document.addEventListener("DOMContentLoaded", () => {
@@ -147,4 +148,22 @@ document.addEventListener("DOMContentLoaded", () => {
             fetchUserDetails(email);
         }
     }
+
+    // Initialize Swiper Carousel
+    const swiper = new Swiper('.swiper', {
+        // Optional parameters
+        loop: true, // Enables infinite looping
+        autoplay: {
+            delay: 3000, // Auto-slide every 3 seconds
+        },
+        // Pagination
+        pagination: {
+            el: '.swiper-pagination',
+            clickable: true,
+        },
+        // Scrollbar
+        scrollbar: {
+            el: '.swiper-scrollbar',
+        },
+    });
 });
