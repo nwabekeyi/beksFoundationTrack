@@ -1,4 +1,7 @@
 // Toggle password visibility
+import { showLoader } from "../../utils/loader.js";
+
+
 function togglePasswordVisibility() {
     console.log("Toggle function called"); // Debugging log
 
@@ -23,6 +26,7 @@ function togglePasswordVisibility() {
 
 // Function to fetch user details by email
 async function fetchUserDetails(email) {
+    //showLoader
     const accessToken = localStorage.getItem("accessToken");
 
     if (accessToken) {
@@ -52,9 +56,12 @@ async function fetchUserDetails(email) {
                     sessionStorage.setItem("userDetails", JSON.stringify(userDetails));
                     console.log("User details saved to session storage.");
                     console.log("Session storage contents:", sessionStorage); // Log session storage
+
+                    //remove loader
                     return userDetails;
                 } catch (error) {
                     console.error("Failed to parse JSON:", error);
+                    loader.remove();
                     alert("Failed to parse user details. Please try again.");
                 }
             } else {
@@ -68,6 +75,7 @@ async function fetchUserDetails(email) {
                 }
             }
         } catch (error) {
+            loader.remove();
             console.error("Error fetching user details:", error);
             alert("An error occurred. Please try again later.");
         }
@@ -79,6 +87,7 @@ async function fetchUserDetails(email) {
 
 // Login function
 async function handleLogin(event) {
+    const loader = showLoader("Loging you in...");
     event.preventDefault(); 
 
     const email = document.getElementById("email").value;
@@ -102,7 +111,8 @@ async function handleLogin(event) {
         });
 
         if (response.ok) {
-            const result = await response.json(); 
+            loader.remove();
+            const result = await response.json();
             console.log("Login successful:", result);
 
             if (result.access_token) {
@@ -115,6 +125,8 @@ async function handleLogin(event) {
 
                 // Fetch user details by email after saving the token
                 const userDetails =  await fetchUserDetails(email); // Pass the email here
+                loader.remove();
+
                 if(userDetails.email && userDetails.role === 'student' ){
                     window.location.href = '../../StudentDashboard/studentDashBoard.html'
                 }else{
@@ -123,11 +135,13 @@ async function handleLogin(event) {
             }
 
         } else {
+            loader.remove();
             const errorResult = await response.json(); 
             console.error("Login failed:", errorResult);
             alert(`Login failed: ${errorResult.message}`); 
         }
     } catch (error) {
+        loader.remove();
         console.error("Error during login:", error);
         alert("An error occurred. Please try again later."); 
     }

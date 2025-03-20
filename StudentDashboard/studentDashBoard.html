@@ -11,18 +11,19 @@
 <body>
     <!-- <iframe src="https://nwabekeyichidiebere.web.app" width="600" height="400" frameborder="0" style="border:0" allowfullscreen></iframe> -->
     <div class="container">
-        
         <header>
             <div class="header-left">
                 <img src="logo.jpg" alt="Logo" class="logo">
-                <h1>Beks Coding Club</h1>
+                <h1 id="heading"></h1>
             </div>
-            <div class="header-right">
                 <div class="progress-circle" id="course-progress">
-                    <span class="progress-text" id="course-progress-text">0%</span>
+                    <div class="course-progress">
+                        <label for="course-progress-bar">Progress</label>
+                        <progress id="course-progress-bar" max="100" ></progress>
+                    </div>
+                    <span class="progress-text" id="course-progress-text"></span>
                 </div>
 
-            </div>
         </header>
 
 
@@ -38,10 +39,7 @@
             <main class="content">
                 <div class="lesson-header">
                     <h2 id="lesson-title">Lesson 1</h2>
-                    <div class="course-progress">
-                        <label for="course-progress-bar" max="100" value="0"></label>
-                        <progress id="course-progress-bar" max="100" value="0"></progress>
-                    </div>
+                   
                 </div>
                 <div id="lesson-content">
                     <!-- Lesson content will be dynamically added here -->
@@ -55,5 +53,5 @@
     </div>
     
 </body>
-<script src="studentDashBoard.js"></script>
+<script src="studentDashBoard.js" type="module"></script>
 </html>

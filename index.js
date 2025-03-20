@@ -1,3 +1,14 @@
+import { showLoader } from "./utils/loader.js";
+
+const loader = showLoader("Welcome to your foundation track learning app...")
+
+//initial page load welcome loader 
+const setLoader = setTimeout(() => {
+  loader.remove();
+  clearInterval(setLoader)
+}, 5000); // Wait for 1 second (fade-out duration)
+
+
 const titles = [
     "Novice To Experts With Beks Coding Club",
     "Experts To Masters With Beks Coding Club",

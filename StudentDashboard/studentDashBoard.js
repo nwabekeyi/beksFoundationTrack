@@ -1,3 +1,8 @@
+import { getSessionData } from "../utils/getSessionData.js";
+
+const userDetails = getSessionData('userDetails');
+console.log(userDetails)
+
 let mockLessons = [
     {
         id: 1,
@@ -48,18 +53,13 @@ function calculateProgress(tasks) {
     return (completedTasks / tasks.length) * 100;
 }
 
-// Calculate all the course progress
-function calculateCourseProgress() {
-    const totalProgress = mockLessons.reduce((sum, lesson) => sum + calculateProgress(lesson.tasks), 0);
-    return totalProgress / mockLessons.length;
-}
-
 // Update the course progress bar
 function updateCourseProgressBar() {
-    const progress = calculateCourseProgress();
     const progressBar = document.getElementById('course-progress-bar');
+    const progressText = document.getElementById("course-progress-text");
+    progressText.innerText = `${userDetails.progress}%`
     if (progressBar) {
-        progressBar.value = progress; // Set the progress value
+        progressBar.value = userDetails.progress; // Set the progress value
     }
 }
 
@@ -73,7 +73,8 @@ function loadLessons(lessons) {
 
     lessons.forEach((lesson, index) => {
         const li = document.createElement('li');
-        const progress = calculateProgress(lesson.tasks);
+        li.style.marginBottom = '10px'
+        li.style.boxShadow= '0 4px 8px rgba(0, 0, 0, 0.1)'
 
         // Add padlock icon based on currentTopicId
         const padlockIcon = lesson.id <= currentTopicId
@@ -94,19 +95,13 @@ function loadLessons(lessons) {
         if (lesson.id > currentTopicId) {
             li.classList.add('blocked');
             li.innerHTML = `
-                <div class="progress-circle blocked" style="--progress: ${progress * 3.6}deg;">
-                    <span class="progress-text">${Math.round(progress)}%</span>
-                </div>
                 ${padlockIcon}
-                ${lesson.id}. ${lesson.title}
+                ${lesson.title}
             `;
         } else {
             li.innerHTML = `
-                <div class="progress-circle" style="--progress: ${progress * 3.6}deg;">
-                    <span class="progress-text">${Math.round(progress)}%</span>
-                </div>
                 ${padlockIcon}
-                ${lesson.id}. ${lesson.title}
+                ${lesson.title}
             `;
             li.addEventListener('click', () => loadLesson(index));
         }
@@ -127,8 +122,9 @@ function loadLesson(index) {
     const lessonTitle = document.getElementById('lesson-title');
     const lessonContent = document.getElementById('lesson-content');
     if (lessonTitle && lessonContent) {
-        lessonTitle.textContent = `${lesson.id}: ${lesson.title}`;
+        lessonTitle.textContent = lesson.title;
         lessonContent.innerHTML = lesson.content;
+        lessonTitle.style.color = '#6B6B6B'
     }
 
     // Save the current topic ID to localStorage
@@ -148,19 +144,7 @@ function loadLesson(index) {
     updateNavigationButtons(index);
 }
 
-// Update progress when a task is completed
-function updateProgress(lessonIndex) {
-    const checkboxes = document.querySelectorAll(`input[data-task^="${lessonIndex + 1}-"]`);
-    checkboxes.forEach((checkbox) => {
-        const taskId = checkbox.getAttribute('data-task');
-        const task = mockLessons[lessonIndex].tasks.find(t => t.id === taskId);
-        if (task) {
-            task.completed = checkbox.checked;
-        }
-    });
-    loadLessons(mockLessons);
-    loadLesson(lessonIndex);
-}
+
 
 // Update navigation buttons (Previous and Next)
 function updateNavigationButtons(index) {
@@ -201,6 +185,14 @@ function handleNextLesson() {
 
 // Initial load
 document.addEventListener('DOMContentLoaded', () => {
+
+    //get all element
+    const heading =  document.getElementById('heading');
+
+
+
+    heading.innerText = `Welcome to your learning dashboard, ${userDetails.firstName}`
+    
     fetchLessonsFromServer().then((lessons) => {
         mockLessons = lessons;
         loadLessons(mockLessons);
