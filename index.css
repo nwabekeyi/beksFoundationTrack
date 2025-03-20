@@ -115,6 +115,7 @@ h1 {
   padding: 1em;
   border-radius: 10px;
   flex: 1;
+  cursor: pointer;
 }
 
 .text-section:hover, .developers:hover {

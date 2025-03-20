@@ -99,7 +99,6 @@ async function handleLogin(event) {
                 "Content-Type": "application/json", 
             },
             body: JSON.stringify(data),
-            mode: "no-cors"
         });
 
         if (response.ok) {
