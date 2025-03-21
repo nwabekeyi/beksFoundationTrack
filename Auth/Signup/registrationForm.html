@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registration Form</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="registrationForm.css">
+</head>
+<body>
+    <!-- Background layer for fading images -->
+    <div class="background-layer"></div>
+
+    <!-- Navbar -->
+    <header id="header">
+        <div class="header-left">
+            <img src="../../StudentDashboard/logo.jpg" alt="beks logo"/>
+            <h1 >Beks Coding Club</h1>
+        </div>
+    </header>
+
+    <div class="register-container registrationForm">
+        <div class="modal-content">
+            <div class="modal-left">
+                <h2>Beks Coding Club Foundation Track</h2>
+                <p>Are you ready to take your first step into the world of coding? The Foundation Track at Beks Coding Club is designed for beginners who want to build a strong foundation in programming. Whether you're a complete novice or looking to refresh your skills, this track will guide you through the essentials of coding in a fun and interactive way....</p>
+                <p>Unlock Your Coding Potential!</p>
+                <button class="have-account-btn" id="account-btn">HAVE AN ACCOUNT?</button>
+            </div>
+
+            <div class="modal-right">
+                <h2 id="form-title">Registration Form</h2>
+                <form id="register-form" class="register-form">
+                    <div class="form-row">
+                        <input type="text" id="first-name" placeholder="First Name" required>
+                        <input type="text" id="last-name" placeholder="Last Name" required>
+                    </div>
+                    <input type="tel" id="phone" placeholder="Phone Number" required>
+                    <input type="email" id="email" placeholder="Email" required>
+                    <div class="form-row">
+                        <input type="password" id="password" placeholder="Password" required>
+                        <input type="password" id="confirm-password" placeholder="Confirm Password" required>
+                    </div>
+                    <div class="form-row">
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="terms" required> 
+                            <span>I've read & agree to the Terms and Conditions</span>
+                        </label>
+                    </div>
+                    <button type="submit" class="register-btn">Register</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <p class="reg-footer">Copyright © 2025 Beks Coding Club | <a class="reg-footer" href="#">Careers</a> | <a class="reg-footer" href="#">Privacy Policy</a></p>
+        </div>
+    </footer>
+
+    <script src="formSubmissions.js" type="module"></script>
+</body>
+</html>

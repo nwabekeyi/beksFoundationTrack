@@ -1,6 +1,12 @@
 import { showLoader } from "./utils/loader.js";
 
-console.log(document.referrer)
+console.log(document.referrer);
+
+const signupBtn = document.querySelector('.sign-up-btn');
+
+signupBtn.addEventListener('click', () => {
+  window.location.href = './Auth/Signup/signUp.html'
+})
 
 const loader = showLoader("Welcome to your foundation track learning app...")
 

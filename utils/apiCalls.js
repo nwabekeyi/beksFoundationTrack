@@ -1,68 +1,80 @@
 import { showLoader } from "./loader.js";
 import { showModal } from "./modal.js";
 
-//for get requests
-export async function apiGet(url, headers = {}) {
-    const loader = showLoader();
+// For GET requests
+export async function apiGet(url, headers = {}, title = '') {
+    const loader = showLoader('Pleasw wait...');
     try {
       const response = await fetch(url, {
         method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-          ...headers, // Spread the additional headers
-        },
+        headers: headers, // Headers fully controlled by argument
       });
-      // Check if the response status is OK
       if (!response.ok) {
+        if (response.status === 401) {
+          const errorData = await response.json();
+          loader.remove();
+          showModal({
+            title: title || 'Unauthorized',
+            message: errorData.message || 'You are not authorized to perform this action',
+            noConfirm: true
+          });
+          throw new Error(`Error: ${response.status} - ${errorData.message || 'Unauthorized'}`);
+        }
         loader.remove();
         throw new Error(`Error: ${response.status}`);
       }
-      const data = await response.json(); // Parse JSON response
+      const data = await response.json();
       loader.remove();
       return data;
     } catch (error) {
-        loader.remove();
+      loader.remove();
       console.error('GET Request failed:', error);
-      throw error; // Rethrow error for further handling
+      throw error;
     }
-  }
+}
 
-
-  export async function apiRequest(url, method, body = {}, headers = {}, title) {
+// For POST, PUT, DELETE, etc. requests
+export async function apiRequest(url, method, body = null, headers = {}, title) {
     const loader = showLoader();
     try {
       const response = await fetch(url, {
-        method: method, // Use dynamic method (POST, PUT, DELETE)
-        headers: {
-          ...headers, // Spread the additional headers
-        },
-        body: body && JSON.stringify(body), // Convert body to JSON
+        method: method,
+        headers: headers, // Headers fully controlled by argument
+        body: body instanceof FormData ? body : body && JSON.stringify(body), // Handle FormData or JSON
       });
-  
-      // Check if the response status is OK
       if (!response.ok) {
+        if (response.status === 401) {
+          const errorData = await response.json();
+          loader.remove();
+          showModal({
+            title: title || 'Unauthorized',
+            message: errorData.message || 'You are not authorized to perform this action',
+            noConfirm: true
+          });
+          throw new Error(`Error: ${response.status} - ${errorData.message || 'Unauthorized'}`);
+        }
         loader.remove();
         throw new Error(`Error: ${response.status}`);
       }
-  
-      const data = await response.json(); // Parse JSON response
+      const data = await response.json();
       loader.remove();
       showModal({
         title: title,
         message: data.message,
         noConfirm: true
-    })
+      });
       return data;
     } catch (error) {
-        loader.remove();
+      loader.remove();
       console.error(`${method} Request failed:`, error);
-      showModal({
-        title: title,
-        message: 'Somethign went wrong. Try again later',
-        noConfirm: true
-    })
-      throw error; // Rethrow error for further handling
+      // Only show generic error modal if not already handled (e.g., not 401)
+      if (!error.message.includes('401')) {
+        showModal({
+          title: title || 'Error',
+          message: 'Something went wrong. Try again later',
+          noConfirm: true
+        });
+      }
+      throw error;
     }
-  }
-
-
+}
