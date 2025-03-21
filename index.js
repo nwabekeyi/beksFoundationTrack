@@ -1,12 +1,14 @@
 import { showLoader } from "./utils/loader.js";
 
+console.log(document.referrer)
+
 const loader = showLoader("Welcome to your foundation track learning app...")
 
 //initial page load welcome loader 
 const setLoader = setTimeout(() => {
   loader.remove();
   clearInterval(setLoader)
-}, 5000); // Wait for 1 second (fade-out duration)
+},3000); // Wait for 1 second (fade-out duration)
 
 
 const titles = [

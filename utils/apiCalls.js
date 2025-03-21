@@ -1,4 +1,6 @@
 import { showLoader } from "./loader.js";
+import { showModal } from "./modal.js";
+
 //for get requests
 export async function apiGet(url, headers = {}) {
     const loader = showLoader();
@@ -26,7 +28,7 @@ export async function apiGet(url, headers = {}) {
   }
 
 
-  export async function apiRequest(url, method, body = {}, headers = {}) {
+  export async function apiRequest(url, method, body = {}, headers = {}, title) {
     const loader = showLoader();
     try {
       const response = await fetch(url, {
@@ -44,13 +46,23 @@ export async function apiGet(url, headers = {}) {
       }
   
       const data = await response.json(); // Parse JSON response
-      loader.remove()
+      loader.remove();
+      showModal({
+        title: title,
+        message: data.message,
+        noConfirm: true
+    })
       return data;
     } catch (error) {
         loader.remove();
       console.error(`${method} Request failed:`, error);
+      showModal({
+        title: title,
+        message: 'Somethign went wrong. Try again later',
+        noConfirm: true
+    })
       throw error; // Rethrow error for further handling
     }
   }
-  
+
 
