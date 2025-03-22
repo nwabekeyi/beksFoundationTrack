@@ -7,9 +7,34 @@
 
 body {
     font-family: 'Poppins', sans-serif;
-    background: linear-gradient(to bottom, #f5f5f5 50%, rgb(185, 212, 230) 50%); /* Changed blue to off-white (#f5f5f5) */    
     min-height: 100vh;
 }
+
+/* Background Layer with Dark Overlay */
+.background-layer {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(to bottom, #f5f5f5 50%, rgb(185, 212, 230) 50%); /* Changed blue to off-white (#f5f5f5) */    
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    z-index: -1; /* Background image behind everything */
+  }
+  
+  /* Dark overlay using ::before, on top of background but below content */
+  .background-layer::before {
+    content: ''; /* Required for pseudo-element */
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.4); /* Dark semi-transparent layer */
+    z-index: 0; /* Above background image (-1), below content (1+) */
+  }
 
 #header .header-left{
     height: 10%;
@@ -26,7 +51,7 @@ body {
 .header-left h1{
     font-size: large;
     margin-left: 10px;
-    color: #333333;
+    color: #fff;
 
 }
 
@@ -247,12 +272,12 @@ footer {
     padding-top: 1.5em;
     /* padding-bottom: 1em; */
     background-color: transparent;
-    color: #666;
+    color: #fff;
     font-size: 12px;
   }
   
   footer a {
-    color: #666;
+    color: #fff;
     text-decoration: none;
     margin: 0 5px;
   }
@@ -260,3 +285,73 @@ footer {
   footer a:hover {
     text-decoration: underline;
   }
+
+
+  @media (max-width: 500px) {
+    .carousel{
+        display: none;
+    }
+
+    .form-container{
+        width: 85%;
+        display: block;
+    }
+
+    .form-wrapper{
+        width: 100% !important;
+    }
+
+    .login-form{
+        width: 100%;
+    }
+
+
+.header-left img{
+    width: 30px;
+    height: auto;
+}
+    }
+
+
+  @media (max-width: 480px) {
+
+    .form-container{
+        width: 90% !important;
+        height: 100% !important;
+
+
+    }
+
+    }
+
+
+    @media (max-width: 780px) {
+
+        .form-container{
+            width: 90%;
+        }
+        .main{
+            margin-top: 0;
+        }
+
+      
+        }
+        @media (max-width: 1040px) {
+
+            .form-container{
+                width: 80%;
+            }
+            }
+
+            @media (max-width: 1200px) {
+
+                .form-container{
+                    width: 80%;
+                    height:70%;
+                    display: grid;
+                }
+                .main{
+                    height: 80vh;
+                }
+                }
+      

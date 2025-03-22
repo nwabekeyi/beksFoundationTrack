@@ -6,24 +6,37 @@
     <title>Beks Coding - Matching Developers with Great Companies</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="index.css">
+    <script src="https://code.iconify.design/iconify-icon/1.0.8/iconify-icon.min.js"></script>
 </head>
 <body>
     <header>
         <div class="header-left">
-            <img src="./StudentDashboard/logo.jpg"/>
+            <img src="./StudentDashboard/logo.jpg" alt="Beks Coding Club Logo"/>
             <h1>Beks Coding Club</h1>
         </div>
         <div class="header-right">
-            <a href="./Auth/Login/index.html" class="nav-btn login-btn" >Login</a>
+            <a href="./Auth/Login/index.html" class="nav-btn login-btn">Login</a>
             <button class="nav-btn sign-up-btn">Sign Up</button>
         </div>
     </header>
+
+    <nav class="mobile-navbar">
+        <div class="mobile-header-left">
+            <img src="./StudentDashboard/logo.jpg" alt="Beks Coding Club Logo"/>
+            <h1>Beks Coding Club</h1>
+        </div>
+        <iconify-icon icon="ci:menu-alt-05" class="menu-icon"></iconify-icon>
+        <div class="mobile-menu">
+            <a href="./Auth/Login/index.html" class="mobile-nav-btn">Login</a>
+            <a href="./Auth/Signup/signUp.html" class="mobile-nav-btn">Sign Up</a>
+        </div>
+    </nav>
+
     <main>
         <div class="hero-content">
             <h1>Learn, create, collaborate, and conquer new challenges!</h1>
             <h2 id="title">Novice To Experts With Beks Coding Club</h2>
         </div>
-        
         <div class="content">
             <div class="article">
                 <div class="text-section">
@@ -37,13 +50,10 @@
                     <button class="action-btn sign-up-code-btn" onclick="window.location.href='register/register.html'">Sign Up & Code</button>
                 </div>
             </div>
-           
             <div class="illustration-section">
-                <img src="https://img.freepik.com/premium-vector/multinational-business-team_171919-1385.jpg">
+                <img src="https://img.freepik.com/premium-vector/multinational-business-team_171919-1385.jpg" alt="Illustration">
             </div>
         </div>
-        </div>
-        
     </main>
     <footer>
         <p>Copyright © 2025 Beks Coding Club | <a href="#">Careers</a> | <a href="#">Privacy Policy</a></p>

@@ -1,7 +1,7 @@
 export function showLoader(text) {
     // Create a loader container
     const loaderContainer = document.createElement('div');
-    loaderContainer.style.height = '100vh';
+    loaderContainer.style.height = '100%';
     loaderContainer.style.zIndex = '100000';
     loaderContainer.style.display = 'flex'; // Use flexbox for centering
     loaderContainer.style.flexDirection = 'column'; // Stack the loader and text vertically
@@ -11,7 +11,8 @@ export function showLoader(text) {
     loaderContainer.style.position = 'absolute';
     loaderContainer.style.top = '0';
     loaderContainer.style.left = '0';
-    loaderContainer.style.width = '100vw';
+    loaderContainer.style.width = '100%';
+    loaderContainer.style.padding = '0 10px';
 
     // Check if text starts with "welcome" (case-insensitive)
     if (text && text.toLowerCase().startsWith('welcome')) {

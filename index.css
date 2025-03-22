@@ -2,13 +2,14 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  font-family: 'Poppins', Arial, sans-serif; /* Applied globally */
+  font-family: 'Poppins', Arial, sans-serif;
 }
 
 body {
   background: #f5f5f5;
 }
 
+/* Main Navbar (visible on desktop) */
 header {
   display: flex;
   justify-content: space-between;
@@ -20,7 +21,7 @@ header {
   margin-bottom: 0;
 }
 
-.header-left h1{
+.header-left h1 {
   font-size: large;
   margin-left: 10px;
   margin-bottom: 0;
@@ -31,13 +32,14 @@ header {
   gap: 10px;
 }
 
-.nav-btn {
+.nav-btn, .mobile-nav-btn {
   padding: 8px 15px;
   border-radius: 5px;
   font-size: 14px;
   font-weight: 500;
   cursor: pointer;
   transition: background-color 0.3s ease;
+  text-decoration: none;
 }
 
 .login-btn {
@@ -50,7 +52,7 @@ header {
 button:hover, .login-btn:hover {
   background-color: rgb(102, 146, 223);
   color: #fff;
-   border: none;
+  border: none;
   transform: scale(1.1);
 }
 
@@ -61,6 +63,96 @@ button:hover, .login-btn:hover {
   text-decoration: none;
 }
 
+/* Mobile Navbar (hidden by default, visible on mobile) */
+.mobile-navbar {
+  display: none; /* Hidden on desktop */
+  align-items: center;
+  justify-content: space-between; /* Logo/name on left, menu icon on right */
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  background-color: #000;
+  z-index: 1000;
+  padding: 10px 20px;
+}
+
+.mobile-header-left {
+  display: flex;
+  align-items: center;
+}
+
+.mobile-header-left img {
+  width: 40px;
+  height: 40px;
+}
+
+.mobile-header-left h1 {
+  font-size: 18px;
+  color: white;
+  margin-left: 10px;
+}
+
+.menu-icon {
+  font-size: 30px;
+  color: white;
+  cursor: pointer;
+  transition: transform 0.5s ease; /* Slow animation for icon, controlled by JS */
+}
+
+.mobile-menu {
+  position: absolute;
+  top: 60px; /* Below navbar */
+  left: 0;
+  width: 100%;
+  background-color: #000;
+  padding: 10px 20px;
+  flex-direction: column;
+  gap: 10px;
+  display: none; /* Hidden initially */
+  height: 0; /* Start with zero height */
+  overflow: hidden; /* Hide content when collapsed */
+  transition: height 0.5s ease-in-out; /* Slow slide animation */
+}
+
+.mobile-menu.active {
+  display: flex; /* Show when active */
+  height: 120px; /* Slide to this height */
+}
+
+.mobile-nav-btn {
+  padding: 8px 15px;
+  border-radius: 5px;
+  font-size: 14px;
+  font-weight: 500;
+  color: white;
+  background: none;
+  border: none;
+  text-align: left;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.mobile-nav-btn:hover {
+  background-color: rgba(255, 255, 255, 0.2);
+}
+
+.mobile-nav-btn.sign-up-btn {
+  background: #1856B4;
+}
+
+/* Hide main navbar and show mobile navbar on mobile screens */
+@media (max-width: 768px) {
+  header {
+    display: none; /* Hide main navbar */
+  }
+
+  .mobile-navbar {
+    display: flex; /* Show mobile navbar */
+  }
+}
+
+/* Rest of your existing styles */
 main {
   display: flex;
   flex-direction: column;
@@ -68,8 +160,8 @@ main {
   padding: 80px 20px 20px;
 }
 
-.hero-content{
-  background:#000000;
+.hero-content {
+  background: #000000;
   color: #b0b6c2;
   width: 100vw;
   font-family: 'Poppins', cursive;
@@ -77,9 +169,10 @@ main {
   padding: 3% 0;
   margin-bottom: 40px;
 }
-.hero-content h1{
+
+.hero-content h1 {
   color: white;
-  font-family: 'Poppins', cursive; /* Overwritten cursive with Poppins */
+  font-family: 'Poppins', cursive;
 }
 
 h1 {
@@ -87,12 +180,12 @@ h1 {
   font-weight: 600;
   color: #333;
   text-align: center;
-  font-family: 'Poppins', cursive; /* Overwritten cursive with Poppins */
+  font-family: 'Poppins', cursive;
 }
 
 #title {
   opacity: 1;
-  transition: opacity 1s ease-in-out; /* Smooth fade effect */
+  transition: opacity 1s ease-in-out;
 }
 
 .content {
@@ -104,14 +197,14 @@ h1 {
   width: 100%;
 }
 
-.article{
+.article {
   display: flex;
   flex: 2;
   gap: 10px;
 }
 
-.text-section, .developers{
-  box-shadow: 0 4px 10px rgba(123, 123, 123, 0.2); /* Added box shadow */
+.text-section, .developers {
+  box-shadow: 0 4px 10px rgba(123, 123, 123, 0.2);
   padding: 1em;
   border-radius: 10px;
   flex: 1;
@@ -134,13 +227,13 @@ h1 {
   text-align: left;
 }
 
-.header-left{
+.header-left {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
 }
 
-.header-left img{
+.header-left img {
   width: 50px;
   height: 50px;
 }
@@ -155,28 +248,6 @@ h1 {
   font-size: 16px;
   color: #666;
   margin-bottom: 5.5px;
-}
-
-.content-section {
-  margin-bottom: 30px;
-  opacity: 0; /* Start with hidden content */
-  transition: opacity 1s ease-in-out; /* Smooth fade-in and fade-out */
-}
-
-.content-section.visible {
-  opacity: 1; /* Show content */
-}
-
-.content-section h3 {
-  font-size: 24px;
-  font-weight: 600;
-  margin-bottom: 10px;
-}
-
-.content-section p {
-  font-size: 16px;
-  line-height: 1.6;
-  margin-bottom: 20px;
 }
 
 .action-btn {
@@ -224,19 +295,6 @@ h1 {
   transition: background-color 0.3s ease;
 }
 
-/* Optional: Enhance blending with a pseudo-element overlay */
-img::after {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(to top, rgba(232, 240, 254, 0.8), rgba(232, 240, 254, 0));
-  z-index: 0;
-  border-radius: 10px;
-}
-
 footer {
   text-align: center;
   background-color: transparent;
@@ -254,93 +312,151 @@ footer a:hover {
   text-decoration: underline;
 }
 
+/* Existing mobile adjustments */
 @media (max-width: 320px) {
-  header {
-    padding: 10px 20px;
-    position: static;
-    background-color: rgba(0, 123, 255, 0.9);
+  .mobile-navbar {
+    padding: 10px 15px;
   }
-  
-  .header-left h1 {
-    font-size: 20px;
+
+  .mobile-header-left h1 {
+    font-size: 16px;
   }
-  
-  .nav-btn {
+
+  .mobile-nav-btn {
     padding: 6px 12px;
     font-size: 12px;
   }
-  
-  main {
-    padding: 80px 10px 30px;
+
+  .mobile-menu.active {
+    height: 100px; /* Adjusted for smaller screen */
   }
-  
+
+
   h1 {
     font-size: 32px;
     margin-bottom: 20px;
   }
-  
+
+
   .content {
     flex-direction: column;
     gap: 20px;
   }
-  
+
   .text-content {
     order: 2;
   }
-  
+
   .illustration-section {
     order: 1;
     max-width: 100%;
   }
-  
-  img {
+
+  .illustration-section img {
     max-width: 200px;
     transform: rotate(0deg);
   }
-  
+
   .section h2 {
     font-size: 18px;
   }
-  
+
   .section p {
     font-size: 13px;
   }
-  
+
   .action-btn {
     padding: 6px 12px;
     font-size: 11px;
   }
-  
+
   footer {
     padding: 15px;
     font-size: 11px;
   }
 }
 
-@media (max-width: 480px) {
-  .header-right {
-    flex-direction: column;
+@media (max-width: 500px) {
+
+
+  .illustration-section {
+  display: none;
+  }
+}
+
+@media (max-width: 769px) {
+  .mobile-menu {
     gap: 5px;
   }
+
+  main {
+    padding: 70px 10px 20px;
+    width: 100%;
+  }
   
+
+  .content {
+    flex-direction: column;
+  }
+
+  .hero-content h1 {
+    font-size: medium;
+  }
+
+  .hero-content h2 {
+    font-size: small;
+  }
+
+  .article {
+    flex-direction: column;
+  }
+
+  .mobile-menu.active {
+    height: 110px; /* Adjusted for medium screen */
+  }
+
   h1 {
     font-size: 24px;
   }
-  
+
   .section h2 {
     font-size: 16px;
   }
-  
+
   .section p {
     font-size: 12px;
   }
-  
-  .avatar img {
+
+  .illustration-section img {
     max-width: 150px;
   }
-  
+
   .action-btn {
     padding: 5px 10px;
     font-size: 10px;
+  }
+
+  .illustration-section {
+  display: none;
+  }
+}
+
+
+@media (max-width: 1040px) {
+  .mobile-menu {
+    gap: 5px;
+  }
+
+  main {
+    padding: 70px 10px 20px;
+    width: 100%;
+  }
+
+  .hero-content{
+    padding: 20px;
+  }
+
+  .illustration-section {
+  display: none;
   }
 }
