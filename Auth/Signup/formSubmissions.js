@@ -136,6 +136,7 @@ const handleFormSubmissions = () => {
 
         // Prepare API request
         const url = endpoints.register;
+        console.log(url)
         const body = {
           firstName,
           lastName,

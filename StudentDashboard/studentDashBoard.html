@@ -9,49 +9,38 @@
     <script src="https://code.iconify.design/iconify-icon/1.0.7/iconify-icon.min.js"></script>
 </head>
 <body>
-    <!-- <iframe src="https://nwabekeyichidiebere.web.app" width="600" height="400" frameborder="0" style="border:0" allowfullscreen></iframe> -->
     <div class="container">
         <header>
             <div class="header-left">
                 <img src="logo.jpg" alt="Logo" class="logo">
                 <h1 id="heading"></h1>
             </div>
-                <div class="progress-circle" id="course-progress">
-                    <div class="course-progress">
-                        <label for="course-progress-bar">Progress</label>
-                        <progress id="course-progress-bar" max="100" ></progress>
-                    </div>
-                    <span class="progress-text" id="course-progress-text"></span>
+            <div class="progress-circle" id="course-progress">
+                <div class="course-progress">
+                    <label for="course-progress-bar">Progress</label>
+                    <progress id="course-progress-bar" max="100"></progress>
                 </div>
-
+                <span class="progress-text" id="course-progress-text"></span>
+                <iconify-icon id="settings-icon" icon="mdi:cog"></iconify-icon>
+                <div id="settings-dropdown" class="settings-dropdown" style="display: none;">
+                    <div id="user-info"></div>
+                    <button id="reset-password-btn">Reset Password</button>
+                    <button id="logout-btn">Logout</button>
+                </div>
+            </div>
         </header>
 
-
         <div class="main-layout">
-            <!-- Sidebar -->
             <aside class="sidebar">
                 <ul id="topic-list">
-                    <!-- Topics space -->
+                    <!-- Initial items or lessons will be populated here -->
                 </ul>
             </aside>
-
-            <!-- Main Content -->
-            <main class="content">
-                <div class="lesson-header">
-                    <h2 id="lesson-title">Lesson 1</h2>
-                   
-                </div>
-                <div id="lesson-content">
-                    <!-- Lesson content will be dynamically added here -->
-                </div>
-                <div class="actions">
-                    <button class="prev-btn">Previous Lesson</button>
-                    <button class="next-btn">Next Lesson</button>
-                </div>
+            <main class="content" id="main-content">
+                <!-- Content will be dynamically updated -->
             </main>
         </div>
     </div>
-    
 </body>
 <script src="studentDashBoard.js" type="module"></script>
 </html>

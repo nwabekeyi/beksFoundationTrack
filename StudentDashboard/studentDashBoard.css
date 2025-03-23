@@ -23,9 +23,8 @@ header {
     align-items: center;
     color: white;
     padding: 15px 20px;
-    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1); /* Adds a subtle shadow */
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
 }
-
 
 .header-left {
     display: flex;
@@ -47,45 +46,116 @@ h1 {
     font-size: 24px;
 }
 
-.header-right {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex: 1;
-}
-
 .progress-circle {
-    width: 30px;
-    height: 40px;
-    border-radius: 50%;
-    background: conic-gradient(#1856B4 var(--progress), #e0e0e0 0);
     display: flex;
     align-items: center;
-    justify-content: end;
+    justify-content: flex-end;
     position: relative;
     flex-shrink: 0;
 }
 
-.progress-circle::before {
-    content: '';
-    position: absolute;
-    width: 80;
-    height: 80%;
-    background: #fff;
-    border-radius: 50%;
-    z-index: 1;
+.course-progress {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    position: relative;
+}
+
+.course-progress label {
+    font-size: 14px;
+    color: #666;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 500;
+}
+
+progress {
+    width: 200px;
+    height: 20px;
+    -webkit-appearance: none;
+    border: none;
+    overflow: hidden;
+    border-radius: 10px;
+    background-color: #f0f0f0;
+    position: relative;
+}
+
+progress::-webkit-progress-bar {
+    background-color: #f0f0f0;
+    border-radius: 10px;
+}
+
+progress::-webkit-progress-value {
+    background: #1856B4;
+    border-radius: 10px;
+    transition: width 0.5s ease;
+}
+
+progress::-moz-progress-bar {
+    background: #1856B4;
+    border-radius: 10px;
 }
 
 .progress-text {
-    position: relative;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-family: 'Poppins', sans-serif;
+    font-size: 12px;
+    color: #fff;
+    font-weight: 600;
     z-index: 2;
-    font-size: 10px;
-    color: #6B6B6B;
-    font-weight: 800;
 }
 
+#settings-icon {
+    color: #1856B4;
+    font-size: 24px;
+    cursor: pointer;
+    margin-left: 15px;
+    transition: color 0.2s ease;
+}
 
+#settings-icon:hover {
+    color: #0e3b7a;
+}
 
+.settings-dropdown {
+    position: absolute;
+    top: calc(100% + 5px);
+    right: 20px;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    padding: 15px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+    width: 250px;
+}
+
+.settings-dropdown p {
+    margin: 8px 0;
+    font-size: 14px;
+    color: #333;
+    font-family: 'Poppins', sans-serif;
+}
+
+.settings-dropdown button {
+    width: 100%;
+    padding: 10px;
+    background-color: #1856B4;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-family: 'Poppins', sans-serif;
+    font-weight: bold;
+    transition: background-color 0.2s ease;
+    margin-top: 10px;
+}
+
+.settings-dropdown button:hover {
+    background-color: #0e3b7a;
+}
 
 .main-layout {
     display: flex;
@@ -113,53 +183,49 @@ h1 {
     border-radius: 4px;
     cursor: pointer;
     display: flex;
-    gap: 5%;
+    gap: 10px;
     align-items: center;
     font-size: 14px;
     color: #333;
     transition: background-color 0.2s ease;
     font-family: 'Poppins', sans-serif;
-    transition: 0 1px 3px rgba(0, 0, 0, 0.1);
-}
-
-.sidebar li .lesson-title {
-    margin-right: 10px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
 
 .sidebar li:hover {
     background-color: #f1f3f5;
 }
 
-
-.progress-text {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    font-family: 'Poppins', sans-serif;
-    transform: translate(-50%, -50%);
+.sidebar-icon {
+    font-size: 18px;
+    color: #333;
 }
 
 .padlock-icon {
-    margin-right: 10px; 
-    font-size: 18px; 
-    vertical-align: middle; 
+    margin-right: 10px;
+    font-size: 18px;
+    vertical-align: middle;
 }
 
 .padlock-icon[icon="mdi:lock-outline"] {
-    color: #ccc; 
+    color: #ccc;
 }
 
 .padlock-icon[icon="mdi:lock-open-outline"] {
-    color: #4caf50; 
+    color: #4caf50;
 }
 
 .active-topic {
-    background-color: #1856B4 !important; 
+    background-color: #1856B4 !important;
     color: white !important;
-    border-left: 4px solid #16a085; 
+    border-left: 4px solid #16a085;
     font-weight: bold;
     padding: 10px;
     border-radius: 5px;
+}
+
+.active-topic .sidebar-icon {
+    color: white;
 }
 
 .content {
@@ -168,59 +234,35 @@ h1 {
     overflow-y: auto;
 }
 
+.welcome-container {
+    text-align: center;
+    padding: 50px;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.welcome-container h2 {
+    font-family: 'Poppins', sans-serif;
+    font-size: 28px;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+.welcome-container p {
+    font-family: 'Poppins', sans-serif;
+    font-size: 16px;
+    color: #666;
+    margin-bottom: 30px;
+}
+
 .lesson-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
     margin-bottom: 20px;
-}
-
-.course-progress {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
-/* #course-progress-bar{
-    border: #1856B4 0.002em solid !important;
-
-} */
-
-.course-progress label {
-    font-size: 14px;
-    color: #666;
-    font-family: 'Poppins', sans-serif;
-    font-weight: 500;   
-}
-
-progress {
-    width: 200px;
-    height: 20px;
-    -webkit-appearance: none;
-    border: none;
-    overflow: hidden;
-    border-radius: 10px;
-    background-color: #f0f0f0;
-}
-
-progress::-webkit-progress-bar {
-    background-color: #f0f0f0;
-    border-radius: 10px;
-}
-
-progress::-webkit-progress-value {
-    background: #1856B4;
-    border-radius: 10px;
-    transition: width 0.5s ease;
-}
-
-progress::-moz-progress-bar {
-    background: #1856B4;
-    border-radius: 10px;
-}
-
-.lesson.progress {
-    font-size: 14px;
-    color: #666;
 }
 
 #lesson-title {
@@ -279,15 +321,21 @@ progress::-moz-progress-bar {
     font-weight: bold;
 }
 
-.next-btn:hover{
-    background-color: rgba(0, 0, 0, 0.1);
+.next-btn:hover {
+    background-color: #0e3b7a;
 }
 
 .active {
     background-color: #000;
 }
 
-.blocked{
+.blocked {
     color: #6B6B6B !important;
     font-weight: 600;
+}
+
+.nav-arrow {
+    font-size: 30px;
+    color: #333;
+    cursor: pointer;
 }

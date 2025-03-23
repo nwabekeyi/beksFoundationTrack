@@ -15,7 +15,7 @@ const setLoader = setTimeout(() => {
 const signupBtn = document.querySelector('.sign-up-btn');
 if (signupBtn) {
   signupBtn.addEventListener('click', () => {
-    window.location.href = './Auth/Signup/registrationForm.html';
+    window.location.href = './Auth/Signup/signUp.html';
   });
 }
 

@@ -41,7 +41,7 @@ export function createModal({ title, message, onConfirm, noConfirm }) {
 
 
     const modalMessage = document.createElement('p');
-    modalMessage.textContent = message || 'Are you sure?';
+    modalMessage.textContent = message ? message : !message && noConfirm ? "Request successful" : 'Are you sure?';
     modalMessage.style.marginTop = '1rem';
 
     const closeButton = document.createElement('button');
