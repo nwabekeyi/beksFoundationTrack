@@ -1,9 +1,12 @@
 import { getSessionData } from "../utils/getSessionData.js";
 import { lessons } from "../utils/lessons.js";
 import { createModal } from "../utils/modal.js";
+import { endpoints } from "../secrets.js"; // Assuming endpoints are in a separate file
 
 const userDetails = getSessionData('userDetails');
 console.log(userDetails);
+
+const accessToken = localStorage.getItem('accessToken'); // Assuming token is stored here
 
 function saveCurrentTopicId(id) {
     localStorage.setItem('currentTopicId', id);
@@ -248,6 +251,43 @@ function handleLogout() {
     window.location.href = '/';
 }
 
+// Function to update startDate via API
+async function updateStartDate() {
+    const currentDate = new Date().toISOString().split('T')[0]; // Current date in YYYY-MM-DD format
+    const payload = {
+        userId: userDetails.id,
+        startDate: currentDate,
+    };
+
+    try {
+        const response = await fetch(`${endpoints.startDate}/${userDetails.id}`, {
+            method: 'PATCH',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${accessToken}`,
+            },
+            body: JSON.stringify(payload),
+        });
+
+        if (!response.ok) {
+            throw new Error('Failed to update start date');
+        }
+
+        const updatedUser = await response.json();
+        console.log('Start date updated:', updatedUser);
+
+        // Update userDetails with the new data
+        Object.assign(userDetails, updatedUser);
+        localStorage.setItem('userDetails', JSON.stringify(userDetails));
+
+        // Proceed to learning platform after successful update
+        loadLearningPlatform();
+    } catch (error) {
+        console.error('Error updating start date:', error);
+        alert('Failed to start your learning journey. Please try again.');
+    }
+}
+
 // Initial Welcome Page
 function loadWelcomePage() {
     const topicList = document.getElementById('topic-list');
@@ -288,8 +328,14 @@ function loadWelcomePage() {
         });
     });
 
-    // Start Learning Button
-    document.getElementById('start-learning-btn').addEventListener('click', loadLearningPlatform);
+    // Start Learning Button with conditional logic
+    document.getElementById('start-learning-btn').addEventListener('click', () => {
+        if (userDetails.startDate === null && userDetails.status === "not_started") {
+            updateStartDate(); // Call API to update startDate and status
+        } else {
+            loadLearningPlatform(); // Directly route to learning interface
+        }
+    });
 }
 
 // Load Learning Platform

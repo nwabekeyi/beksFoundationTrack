@@ -113,7 +113,11 @@ async function handleLogin(event) {
             redirectToDashboard(userDetails.role);
         } else {
             const errorResult = await response.json();
-            alert(`Login failed: ${errorResult.message}`);
+            showModal({
+                title: "Login response",
+                message: `Login failed: ${errorResult.message}`,
+                noConfirm: true
+            })
         }
     } catch (error) {
         console.error("Error during login:", error);
