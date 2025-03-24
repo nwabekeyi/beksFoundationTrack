@@ -454,13 +454,12 @@ function setupSettingsDropdown() {
     const settingsDropdown = document.getElementById("settings-dropdown");
     const userInfo = document.getElementById("user-info");
     const resetPasswordBtn = document.getElementById("reset-password-btn");
-
     if (userInfo) {
         userInfo.innerHTML = `
             <p><strong>Name:</strong> ${userDetails.firstName} ${userDetails.lastName || ""}</p>
             <p><strong>Email:</strong> ${userDetails.email}</p>
             <p><strong>Role:</strong> ${userDetails.role || "Student"}</p>
-            <p><strong>Average Score:</strong> ${userDetails.averageScore || "N/A"}</p>
+            <p><strong>Average Score:</strong> ${userDetails.averageScore === 0 || userDetails.averageScore ? userDetails.averageScore : 'N/A'}</p>
         `;
     }
 
