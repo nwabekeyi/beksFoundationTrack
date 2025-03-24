@@ -32,7 +32,7 @@ body {
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, 0.4); /* Dark semi-transparent layer */
+    background-color: rgba(0, 0, 0, 0.1); /* Dark semi-transparent layer */
     z-index: 0; /* Above background image (-1), below content (1+) */
   }
 
@@ -79,13 +79,15 @@ body {
 
 /* Form Container */
 .form-container {
-    width: 60%;
+    width: 50%;
     background-color: whitesmoke;
     border-radius: 28px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     overflow: hidden;
     display: flex;
     /* margin-bottom: 20px; */
+    height: 70%;
+
 }
 
 .form-wrapper {
@@ -288,21 +290,14 @@ footer {
 
 
   @media (max-width: 500px) {
-    .carousel{
-        display: none;
-    }
-
+ 
     .form-container{
-        width: 85%;
+        width: 80%;
         display: block;
     }
 
     .form-wrapper{
         width: 100% !important;
-    }
-
-    .login-form{
-        width: 100%;
     }
 
 
@@ -313,33 +308,34 @@ footer {
     }
 
 
-  @media (max-width: 480px) {
-
-    .form-container{
-        width: 90% !important;
-        height: 100% !important;
-
-
-    }
-
-    }
-
 
     @media (max-width: 780px) {
+        .carousel{
+            display: none;
+        }
+
+
+    .login-form{
+        width: 100%;
+    }
+
 
         .form-container{
-            width: 90%;
+            width: 80%;
+            display: block;
+            align-content: center;
         }
         .main{
             margin-top: 0;
         }
 
-      
         }
         @media (max-width: 1040px) {
 
             .form-container{
                 width: 80%;
+                height: 80% !important;
+
             }
             }
 
@@ -349,9 +345,14 @@ footer {
                     width: 80%;
                     height:80%;
                     display: grid;
+                    align-content: center;
                 }
                 .main{
                     height: 80vh;
+                }
+                
+                .login-form{
+                    height: 100%;
                 }
                 }
       
