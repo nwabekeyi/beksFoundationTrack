@@ -203,8 +203,7 @@ h1 {
   gap: 10px;
 }
 
-.text-section, .developers {
-  box-shadow: 0 4px 10px rgba(123, 123, 123, 0.2);
+.text-section, .developers, .text-content {
   padding: 1em;
   border-radius: 10px;
   flex: 1;
@@ -221,6 +220,9 @@ h1 {
 
 .text-content {
   color: #6B6B6B;
+  text-align: left;
+  padding: 0;
+  width: 100%;
 }
 
 .section {
@@ -244,11 +246,7 @@ h1 {
   margin-bottom: 10px;
 }
 
-.section p {
-  font-size: 16px;
-  color: #666;
-  margin-bottom: 5.5px;
-}
+
 
 .action-btn {
   margin-top: 1.8em;
@@ -357,14 +355,6 @@ footer a:hover {
     transform: rotate(0deg);
   }
 
-  .section h2 {
-    font-size: 18px;
-  }
-
-  .section p {
-    font-size: 13px;
-  }
-
   .action-btn {
     padding: 6px 12px;
     font-size: 11px;
@@ -417,14 +407,6 @@ footer a:hover {
 
   h1 {
     font-size: 24px;
-  }
-
-  .section h2 {
-    font-size: 16px;
-  }
-
-  .section p {
-    font-size: 12px;
   }
 
   .illustration-section img {
