@@ -136,16 +136,18 @@ body {
 }
 
 .modal-right {
-    display: grid;
-    place-content: center;
+    display: flex;
+    align-items: center;
     background-color: #fff;
     padding: 30px;
     flex: 1;
+    justify-content: center;
+    flex-direction: column !important;
 }
 
 .modal-right h2 {
     font-family: 'Poppins', sans-serif;
-    font-size: 24px;
+    font-size: 20px;
     margin-bottom: 20px;
     color: #333;
 }
@@ -233,10 +235,24 @@ footer a:hover {
     color:#fff
 }
 
-@media (max-width: 769px) {
+@media (max-width: 500px) {
+
+    .register-container{
+        padding: 20px !important;
+    }
+
+    }
+
+
+@media (max-width: 1040px) {
+
+    #register-from{
+        width: 90%;
+    }
 
     .register-container{
         height: 75%;
+        padding: 20px 100px;
     }
 
     .header-left{
@@ -266,6 +282,10 @@ footer a:hover {
 
         .register-container{
             height: 75%;
+        }
+
+        #register-form{
+            width: 90%;
         }
 
         }

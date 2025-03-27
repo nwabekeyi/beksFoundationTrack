@@ -2,7 +2,7 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: Arial, sans-serif;
+    font-family: 'Poppins', Arial, sans-serif;
 }
 
 body {
@@ -35,6 +35,10 @@ header {
 .header-left h1 {
     color: #6B6B6B;
     font-size: medium;
+}
+
+p {
+    color: #6B6B6B;
 }
 
 .logo {
@@ -102,7 +106,7 @@ progress::-moz-progress-bar {
     transform: translate(-50%, -50%);
     font-family: 'Poppins', sans-serif;
     font-size: 12px;
-    color: #fff;
+    color: #6B6B6B;
     font-weight: 600;
     z-index: 2;
 }
@@ -176,15 +180,10 @@ progress::-moz-progress-bar {
 }
 
 .sidebar li {
-    padding: 12px;
     margin-bottom: 8px;
     background-color: #fff;
     border: none;
     border-radius: 4px;
-    cursor: pointer;
-    display: flex;
-    gap: 10px;
-    align-items: center;
     font-size: 14px;
     color: #333;
     transition: background-color 0.2s ease;
@@ -192,13 +191,38 @@ progress::-moz-progress-bar {
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
 
+.topic-container {
+    padding: 12px;
+    display: flex;
+    flex-direction: column;
+}
+
+.topic-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    cursor: pointer;
+}
+.topic, .topic-dropdown{
+    display: flex;
+    justify-content: space-between;
+}
+
+.topic p{
+    font-weight: 700;
+}
+
 .sidebar li:hover {
     background-color: #f1f3f5;
 }
 
-.sidebar-icon {
+.sidebar-icon, .dropdown-arrow {
     font-size: 18px;
-    color: #333;
+    color: #666;
+}
+
+.sidebar-icon{
+    margin-right: 5px;
 }
 
 .padlock-icon {
@@ -215,17 +239,42 @@ progress::-moz-progress-bar {
     color: #4caf50;
 }
 
-.active-topic {
-    background-color: #1856B4 !important;
-    color: white !important;
-    border-left: 4px solid #16a085;
-    font-weight: bold;
-    padding: 10px;
-    border-radius: 5px;
+.dropdown-arrow {
+    margin-left: auto;
 }
 
-.active-topic .sidebar-icon {
+.dropdown {
+    list-style: none;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.5s ease-in-out;
+}
+
+.dropdown.open {
+    max-height: fit-content; /* Adjust based on content height */
+}
+
+.dropdown li {
+    padding: 5px 10px;
+    font-size: 14px;
+    box-shadow: none;
+    cursor: pointer;
+}
+
+.dropdown li:hover {
+    background-color: #e9ecef;
+}
+
+.dropdown li.active-subitem {
+    background-color: #1856B4;
     color: white;
+    font-weight: bold;
+}
+
+.blocked {
+    color: #6B6B6B !important;
+    font-weight: 600;
+    cursor: not-allowed;
 }
 
 .content {
@@ -268,7 +317,7 @@ progress::-moz-progress-bar {
 }
 
 .welcome-container button {
-    width: 150px;
+    width: auto;
     margin: auto;
 }
 
@@ -288,7 +337,7 @@ progress::-moz-progress-bar {
 
 #lesson-content {
     background-color: #fff;
-    padding:  30px 50px;
+    padding: 10px;
     border: 1px solid #ddd;
     border-radius: 4px;
     margin-bottom: 20px;
@@ -298,13 +347,11 @@ progress::-moz-progress-bar {
     margin-bottom: 10px;
     font-family: 'Poppins', sans-serif;
     color: #1856B4;
-
 }
 
-#lesson-content li strong {
+#lesson-content li strong, .additional-resources {
     font-family: 'Poppins', sans-serif;
     color: #1856B4;
-
 }
 
 #lesson-content p {
@@ -349,24 +396,14 @@ progress::-moz-progress-bar {
     background-color: #0e3b7a;
 }
 
-.active {
-    background-color: #000;
-}
-
-.blocked {
-    color: #6B6B6B !important;
-    font-weight: 600;
-}
-
-.nav-arrow {
-    font-size: 30px;
-    background-color: #333;
-    cursor: pointer;
-    color: #f0f0f0;
-    border-radius: 50%;
-}
-
 .nav-arrow:hover {
-    scale: 1.3;
-    transition: scale 1s;
+    color: #1856B4 !important;
+}
+
+#home-item, #stats-item, #logout-item{
+    font-weight: 700;
+    padding: 10px;
+    color: #666;
+    display: flex;
+    align-items: center;
 }

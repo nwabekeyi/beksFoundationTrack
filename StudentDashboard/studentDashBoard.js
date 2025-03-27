@@ -1,288 +1,23 @@
 import { getSessionData } from "../utils/getSessionData.js";
 import { lessons } from "../utils/lessons.js";
 import { createModal } from "../utils/modal.js";
-import { endpoints } from "../secrets.js"; // Assuming endpoints are in a separate file
+import { endpoints } from "../secrets.js";
 import { apiRequest } from "../../utils/apiCalls.js";
 
 const userDetails = getSessionData("userDetails");
-console.log(userDetails);
-
-const accessToken = localStorage.getItem("accessToken"); // Assuming token is stored here
+const accessToken = localStorage.getItem("accessToken");
 
 function saveCurrentTopicId(id) {
     localStorage.setItem("currentTopicId", id);
 }
 
 function updateCourseProgressBar() {
+    const progress = userDetails.currentTopicId/lessons.length * 100;
     const progressBar = document.getElementById("course-progress-bar");
     const progressText = document.getElementById("course-progress-text");
     if (progressBar && progressText) {
-        progressText.innerText = `${userDetails.progress}%`;
-        progressBar.value = userDetails.progress;
-    }
-}
-
-function loadLessons(lessonsArray) {
-    const topicList = document.getElementById("topic-list");
-    if (!topicList) return;
-    topicList.innerHTML = "";
-
-    const currentTopicId = userDetails.currentTopicId;
-
-    lessonsArray.forEach((lesson, index) => {
-        const li = document.createElement("li");
-        const padlockIcon = lesson.id <= currentTopicId
-            ? '<iconify-icon icon="mdi:lock-open-outline" data-current="current" class="padlock-icon"></iconify-icon>'
-            : '<iconify-icon icon="mdi:lock-outline" class="padlock-icon"></iconify-icon>';
-
-        if (lesson.id > currentTopicId) {
-            li.classList.add("blocked");
-            li.innerHTML = `${padlockIcon} ${lesson.title}`;
-        } else {
-            li.innerHTML = `${padlockIcon} ${lesson.title}`;
-            li.addEventListener("click", () => loadLesson(index));
-        }
-
-        topicList.appendChild(li);
-    });
-
-    const currentTopicIcon = document.querySelector('[data-current="current"]');
-    if (currentTopicIcon) {
-        currentTopicIcon.style.color = "#4caf50";
-    }
-
-    updateCourseProgressBar();
-}
-
-let currentImageIndex = 0;
-
-function loadLesson(index) {
-    const lesson = lessons[index];
-    const lessonTitle = document.getElementById("lesson-title");
-    const lessonContent = document.getElementById("lesson-content");
-    if (lessonTitle && lessonContent) {
-        lessonTitle.textContent = lesson.title;
-        currentImageIndex = 0;
-        updateLessonContent(lesson, currentImageIndex);
-    }
-
-    const sidebarItems = document.querySelectorAll(".sidebar li");
-    sidebarItems.forEach((item) => {
-        item.classList.remove("active-topic");
-        item.classList.remove("active");
-    });
-
-    if (sidebarItems[index]) {
-        sidebarItems[index].classList.add("active-topic");
-        sidebarItems[index].classList.add("active");
-    }
-
-    updateNavigationButtons(index, lesson);
-}
-
-function updateLessonContent(lesson, imageIndex) {
-    const lessonContent = document.getElementById("lesson-content");
-    if (!lessonContent) return;
-
-    lessonContent.innerHTML = "";
-
-    const contentWrapper = document.createElement("div");
-    contentWrapper.style.position = "relative";
-    contentWrapper.style.display = "flex";
-    contentWrapper.style.alignItems = "center";
-    contentWrapper.style.justifyContent = "center";
-
-    if (imageIndex > 0) {
-        const prevArrow = document.createElement("iconify-icon");
-        prevArrow.setAttribute("icon", "mdi:chevron-left");
-        prevArrow.classList.add("nav-arrow");
-        prevArrow.style.position = "absolute";
-        prevArrow.style.left = "10px";
-        prevArrow.style.fontSize = "30px";
-        prevArrow.style.cursor = "pointer";
-        prevArrow.style.color = "#f0f0f0";
-        prevArrow.addEventListener("click", () => {
-            currentImageIndex--;
-            updateLessonContent(lesson, currentImageIndex);
-        });
-        contentWrapper.appendChild(prevArrow);
-    }
-
-    const img = document.createElement("img");
-    img.src = lesson.content[imageIndex];
-    img.alt = `${lesson.title} Slide ${imageIndex + 1}`;
-    img.style.maxWidth = "100%";
-    contentWrapper.appendChild(img);
-
-    if (imageIndex < lesson.content.length - 1) {
-        const nextArrow = document.createElement("iconify-icon");
-        nextArrow.setAttribute("icon", "mdi:chevron-right");
-        nextArrow.classList.add("nav-arrow");
-        nextArrow.style.position = "absolute";
-        nextArrow.style.right = "10px";
-        nextArrow.style.fontSize = "30px";
-        nextArrow.style.cursor = "pointer";
-        nextArrow.style.color = "#f0f0f0";
-        nextArrow.addEventListener("click", () => {
-            currentImageIndex++;
-            updateLessonContent(lesson, currentImageIndex);
-        });
-        contentWrapper.appendChild(nextArrow);
-    }
-
-    lessonContent.appendChild(contentWrapper);
-
-    if (imageIndex === lesson.content.length - 1) {
-        const doTaskBtn = document.createElement("button");
-        doTaskBtn.textContent = "Do Task";
-        doTaskBtn.classList.add("next-btn");
-        doTaskBtn.style.marginTop = "20px";
-        doTaskBtn.style.display = "block";
-        doTaskBtn.style.float = "right";
-        doTaskBtn.addEventListener("click", () => displayTask(lesson));
-        lessonContent.appendChild(doTaskBtn);
-    }
-}
-
-function updateNavigationButtons(lessonIndex, lesson) {
-    const prevBtn = document.querySelector(".prev-btn");
-    const nextBtn = document.querySelector(".next-btn");
-    const currentTopicId = userDetails.currentTopicId;
-
-    if (prevBtn && nextBtn) {
-        prevBtn.style.display = lessonIndex === 0 ? "none" : "block";
-        nextBtn.style.display = (lesson.id < currentTopicId && lessonIndex !== lessons.length - 1) ? "block" : "none";
-
-        prevBtn.onclick = () => {
-            if (lessonIndex > 0) {
-                loadLesson(lessonIndex - 1);
-            }
-        };
-
-        nextBtn.onclick = () => {
-            if (lessonIndex < lessons.length - 1 && lesson.id < currentTopicId) {
-                handleNextLesson();
-            }
-        };
-    }
-}
-
-function displayTask(lesson) {
-    const lessonContent = document.getElementById("lesson-content");
-    if (!lessonContent) return;
-
-    lessonContent.innerHTML = `
-        <h3>Task</h3>
-        <p>${lesson.task}</p>
-        <button id="submit-task-btn" class="next-btn">Submit Task</button>
-    `;
-
-    const submitTaskBtn = document.getElementById("submit-task-btn");
-    if (submitTaskBtn) {
-        submitTaskBtn.style.marginTop = "20px";
-        submitTaskBtn.style.display = "block";
-        submitTaskBtn.addEventListener("click", () => displaySubmissionForm(lesson));
-    }
-}
-
-function displaySubmissionForm(lesson) {
-    const lessonContent = document.getElementById("lesson-content");
-    if (!lessonContent) return;
-
-    lessonContent.innerHTML = `
-        <h3>Submit Your Task</h3>
-        <form id="task-submission-form">
-            <label>
-                <input type="radio" name="submission-type" value="file" checked> Upload Files (HTML required, CSS optional)
-            </label>
-            <label>
-                <input type="radio" name="submission-type" value="text"> Enter Text
-            </label>
-            <div id="submission-input">
-                <input type="file" id="html-upload" accept=".html" required style="margin-top: 10px; display: block;">
-                <input type="file" id="css-upload" accept=".css" style="margin-top: 10px; display: block;">
-            </div>
-            <button type="submit" class="next-btn">Submit</button>
-        </form>
-    `;
-
-    const form = document.getElementById("task-submission-form");
-    const submissionInput = document.getElementById("submission-input");
-    const radioButtons = document.querySelectorAll('input[name="submission-type"]');
-
-    radioButtons.forEach((radio) => {
-        radio.addEventListener("change", (e) => {
-            if (e.target.value === "file") {
-                submissionInput.innerHTML = `
-                    <input type="file" id="html-upload" accept=".html" required style="margin-top: 10px; display: block;">
-                    <input type="file" id="css-upload" accept=".css" style="margin-top: 10px; display: block;">
-                `;
-            } else {
-                submissionInput.innerHTML = `
-                    <textarea id="text-submission" rows="10" cols="50" style="margin-top: 10px; width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 4px;"></textarea>
-                `;
-            }
-        });
-    });
-
-    form.addEventListener("submit", (e) => {
-        e.preventDefault();
-        const currentIndex = lessons.findIndex((l) => l.id === lesson.id);
-        if (currentIndex < lessons.length - 1) {
-            const nextLessonId = lessons[currentIndex + 1].id;
-            saveCurrentTopicId(nextLessonId);
-        }
-        console.log("Submission logic to be implemented");
-        loadLessons(lessons);
-        loadLesson(currentIndex);
-    });
-}
-
-function handleNextLesson() {
-    const currentIndex = Array.from(document.querySelectorAll(".sidebar li")).findIndex((item) =>
-        item.classList.contains("active")
-    );
-    if (currentIndex < lessons.length - 1) {
-        const nextIndex = currentIndex + 1;
-        const nextTopicId = lessons[nextIndex].id;
-
-        saveCurrentTopicId(nextTopicId);
-        loadLessons(lessons);
-        loadLesson(nextIndex);
-    }
-}
-
-function handleLogout() {
-    localStorage.removeItem("accessToken");
-    window.location.href = "/";
-}
-
-async function updateStartDate() {
-    const currentDate = new Date().toISOString().split("T")[0]; // Current date in YYYY-MM-DD format
-    const payload = {
-        userId: userDetails.id,
-        startDate: currentDate,
-    };
-
-    const url = `${endpoints.startDate}/${userDetails.id}`;
-    const body = JSON.stringify(payload);
-    const headers = {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${accessToken}`,
-    };
-
-    try {
-        const response = await apiRequest(url, "PATCH", body, headers, "Start Lessons");
-        Object.assign(userDetails, response);
-        localStorage.setItem("userDetails", JSON.stringify(userDetails));
-        loadLearningPlatform(); // Show VSCode training after successful update
-    } catch (error) {
-        console.error("Error updating start date:", error);
-        createModal({
-            title: "Error",
-            message: "Failed to start your learning journey. Please try again.",
-            noConfirm: true,
-        });
+        progressText.innerText = `${parseInt(progress)}%`;
+        progressBar.value = progress;
     }
 }
 
@@ -292,24 +27,28 @@ function loadWelcomePage() {
 
     if (topicList) {
         topicList.innerHTML = `
-            <li id="home-item">
-                <iconify-icon icon="mdi:home" class="sidebar-icon"></iconify-icon> Home
-            </li>
-            <li id="stats-item">
-                <iconify-icon icon="mdi:chart-bar" class="sidebar-icon"></iconify-icon> Stats
-            </li>
-            <li id="logout-item">
-                <iconify-icon icon="mdi:logout" class="sidebar-icon"></iconify-icon> Logout
-            </li>
+            <li id="home-item"><iconify-icon icon="mdi:home" class="sidebar-icon"></iconify-icon> Home</li>
+            <li id="stats-item"><iconify-icon icon="mdi:chart-bar" class="sidebar-icon"></iconify-icon> Stats</li>
+            <li id="logout-item"><iconify-icon icon="mdi:logout" class="sidebar-icon"></iconify-icon> Logout</li>
         `;
     }
 
     if (mainContent) {
         const buttonText = userDetails.status === "active" ? "Continue Learning" : "Start Learning";
-        mainContent.innerHTML = `
+        const welcomeText = userDetails.status === "active" ? "Welcome back, we hope to see you grow as you learn with us" : "We're excited to have you on board. Ready to dive into your learning journey?";
+        const vsCodeText = userDetails.status === "not_started" ? `
+    <p>You'll need Visual Studio Code installed to get started with your lessons. <a href="https://code.visualstudio.com/download" target="_blank">Download it here</a> if you haven't already!</p>
+    <p>A code editor or IDE (Integrated Development Environment) is a tool that helps you write, edit, and test code efficiently. Think of it like a super-powered notepad for programming—it highlights syntax, catches errors, and often includes features like auto-completion and debugging to make coding easier. Visual Studio Code (VS Code) is a popular, lightweight code editor that supports many languages and extensions, letting you customize it for your needs.</p>
+    <p>Here’s a quick overview:</p>
+    <div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; max-width: 100%;">
+        <iframe src="/videos/vscode-explainer.mp4" frameborder="0" allowfullscreen style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"></iframe>
+    </div>
+` : '';
+            mainContent.innerHTML = `
             <div class="welcome-container">
                 <h2>Welcome, ${userDetails.firstName}!</h2>
-                <p>We're excited to have you on board. Ready to dive into your learning journey?</p>
+                <p>${welcomeText}</p>
+                ${vsCodeText}
                 <img src="../assets/welcomeBg.png" />
                 <button id="start-learning-btn" class="next-btn">${buttonText}</button>
             </div>
@@ -322,114 +61,23 @@ function loadWelcomePage() {
     const startLearningBtn = document.getElementById("start-learning-btn");
     const logo = document.querySelector('.header-left');
 
-    // Go to home on click of logo
     if (logo) {
         logo.style.cursor = 'pointer';
         logo.addEventListener("click", loadWelcomePage);
     }
 
     if (homeItem) homeItem.addEventListener("click", loadWelcomePage);
-    if (statsItem) {
-        statsItem.addEventListener("click", () => {
-            if (mainContent) {
-                mainContent.innerHTML = "<h2>Stats</h2><p>Your learning statistics will be displayed here soon!</p>";
-            }
-        });
-    }
-    if (logoutItem) {
-        logoutItem.addEventListener("click", () => {
-            createModal({
-                title: "Confirm Logout",
-                message: "Are you sure you want to logout?",
-                onConfirm: handleLogout,
-            });
-        });
-    }
-    if (startLearningBtn) {
-        startLearningBtn.addEventListener("click", () => {
-            if (userDetails.status === "active") {
-                // Navigate to the lesson matching currentTopicId
-                const currentLessonIndex = lessons.findIndex(lesson => lesson.id === userDetails.currentTopicId);
-                if (currentLessonIndex !== -1) {
-                    loadLessonsPage();
-                    loadLesson(currentLessonIndex);
-                } else {
-                    console.error("No lesson found matching currentTopicId:", userDetails.currentTopicId);
-                    loadLessonsPage(); // Fallback to Lesson 1 if no match
-                }
-            } else if (userDetails.startDate === null && userDetails.status === "not_started") {
-                updateStartDate(); // Update start date, then show VSCode training
-            } else {
-                loadLearningPlatform(); // Show VSCode training directly
-            }
-        });
-    }
-}
-
-function loadLearningPlatform() {
-    const mainContent = document.getElementById("main-content");
-    if (!mainContent) return;
-
-    mainContent.innerHTML = `
-        <div class="lesson-header">
-            <h2 id="lesson-title">Getting Started: What is an IDE?</h2>
-        </div>
-        <div id="lesson-content">
-            <p>Hey there! Before we jump into coding, let’s talk about something called an <strong>IDE</strong>, or Integrated Development Environment. Think of it like a super helpful toolbox we use to write code—the instructions that tell computers what to do. Just like how a kitchen has everything you need to cook (stove, knives, and all), an IDE gives us tools to write, check, and fix our code easily, all in one place!</p>
-            <h3>Types of IDEs</h3>
-            <p>There are lots of IDEs out there, each with its own style. Here are a few you might hear about:</p>
-            <ul>
-                <li><strong>Eclipse</strong>: Great for writing Java code, often used by people making big apps.</li>
-                <li><strong>IntelliJ IDEA</strong>: Another favorite for Java, super smart at helping you code faster.</li>
-                <li><strong>PyCharm</strong>: Perfect if you’re coding in Python, like for making games or websites.</li>
-                <li><strong>Visual Studio Code (VSCode)</strong>: The one we’ll use—it works for almost any coding language and is easy to customize!</li>
-            </ul>
-            <p>In this course, we’re going with <strong>Visual Studio Code (VSCode)</strong>. It’s made by Microsoft, and it’s awesome because it’s simple to use, doesn’t slow down your computer, and lets you tweak it to fit what you like. Whether you’re a beginner or a pro, VSCode has your back!
-            <strong>All of your code in the course should be written on VSCode</strong>
-            </p>
-            <h3>Installing VSCode on Windows</h3>
-            <p>Let’s get VSCode onto your computer. It’s like downloading a game or app—super easy! Here’s how:</p>
-            <ol>
-                <li>Go to the VSCode website: <a href="https://code.visualstudio.com/download" target="_blank">https://code.visualstudio.com/download</a></li>
-                <li>Click the “Windows” button to download the installer—it’s a file that sets everything up.</li>
-                <li>Find the file you downloaded (it’ll look something like <code>VSCodeSetup-x64-1.x.x.exe</code>) and double-click it.</li>
-                <li>A setup wizard will pop up. Just:
-                    <ul>
-                        <li>Say “yes” to the agreement (it’s like agreeing to the rules).</li>
-                        <li>Pick where to save it (the default spot is fine).</li>
-                        <li>Check any extra boxes you want (like adding a shortcut to your desktop).</li>
-                        <li>Hit “Install” and wait a bit.</li>
-                        <li>Click “Finish” to open VSCode!</li>
-                    </ul>
-                </li>
-                <li>Once it’s open, you’ll see a welcome screen. That’s your new coding home—ready for action!</li>
-            </ol>
-            <h3>How VSCode Works</h3>
-            <p>VSCode is like your coding playground. When you open it, you’ll see:
-                <ul>
-                    <li>A <strong>file explorer</strong> on the left—like a folder list to find your projects.</li>
-                    <li>A <strong>code editor</strong> in the middle—where you’ll type your code.</li>
-                    <li>A <strong>terminal</strong> you can pop up (press Ctrl + \` )—think of it as a command center to talk to your computer.</li>
-                </ul>
-            </p>
-            <p>You can also add <strong>extensions</strong>—little add-ons that make VSCode even cooler, like tools for writing HTML, CSS, or JavaScript. It’s like adding toppings to your favorite pizza!</p>
-            <p>Check out this quick video to see VSCode in action:</p>
-            <div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; max-width: 100%;">
-                <iframe 
-                    src="https://www.youtube.com/embed/1I6NKNUg4Oc" 
-                    frameborder="0" 
-                    allowfullscreen 
-                    style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;">
-                </iframe>
-            </div>
-            <button id="start-lessons-btn" class="next-btn" style="margin-top: 20px; float: right;">Start Lessons</button>
-        </div>
-    `;
-
-    const startLessonsBtn = document.getElementById("start-lessons-btn");
-    if (startLessonsBtn) {
-        startLessonsBtn.addEventListener("click", () => loadLessonsPage());
-    }
+    if (statsItem) statsItem.addEventListener("click", () => { mainContent.innerHTML = "<h2>Stats</h2><p>Your learning statistics will be displayed here soon!</p>"; });
+    if (logoutItem) logoutItem.addEventListener("click", () => createModal({ title: "Confirm Logout", message: "Are you sure you want to logout?", onConfirm: handleLogout }));
+    if (startLearningBtn) startLearningBtn.addEventListener("click", () => {
+        if (userDetails.status === "active") {
+            const currentLessonIndex = lessons.findIndex(lesson => lesson.id === userDetails.currentTopicId);
+            loadLessonsPage();
+            loadSubitem(currentLessonIndex !== -1 ? currentLessonIndex : 0, "content-0");
+        } else {
+            updateStartDate();
+        }
+    });
 }
 
 function loadLessonsPage() {
@@ -438,15 +86,418 @@ function loadLessonsPage() {
 
     mainContent.innerHTML = `
         <div class="lesson-header">
-            <h2 id="lesson-title">Lesson 1</h2>
+            <h2 id="lesson-title"></h2>
         </div>
         <div id="lesson-content"></div>
         <div class="actions">
-            <button class="prev-btn">Previous Lesson</button>
-            <button class="next-btn">Next Lesson</button>
+            <button class="prev-btn">Previous</button>
+            <button class="next-btn">Next</button>
         </div>
     `;
-    loadLessons(lessons);
+
+    loadTopics(lessons);
+}
+
+function loadTopics(lessonsArray) {
+    const topicList = document.getElementById("topic-list");
+    if (!topicList) return;
+    topicList.innerHTML = "";
+
+    const currentTopicId = userDetails.currentTopicId;
+
+    lessonsArray.forEach((lesson, index) => {
+        const li = document.createElement("li");
+        const padlockIcon = lesson.id <= currentTopicId
+            ? '<iconify-icon icon="mdi:lock-open-outline" data-current="current" class="padlock-icon"></iconify-icon>'
+            : '<iconify-icon icon="mdi:lock-outline" class="padlock-icon"></iconify-icon>';
+        const dropdownIcon = lesson.id <= currentTopicId ? '<iconify-icon icon="mdi:chevron-down" class="dropdown-arrow"></iconify-icon>' : '';
+        let subitems = '<ul class="dropdown">';
+
+        // Add all slides for every topic
+        lesson.content.forEach((_, subIndex) => {
+            subitems += `<li data-lesson-id="${index}" data-subitem="content-${subIndex}" class="${currentLessonIndex === index && currentSubitem === `content-${subIndex}` ? 'active-subitem' : ''}">Slide ${subIndex + 1}</li>`;
+        });
+
+        // Add Video and Task for every topic
+        subitems += `<li data-lesson-id="${index}" data-subitem="video" class="${currentLessonIndex === index && currentSubitem === 'video' ? 'active-subitem' : ''}">Video</li>`;
+        subitems += `<li data-lesson-id="${index}" data-subitem="task" class="${currentLessonIndex === index && currentSubitem === 'task' ? 'active-subitem' : ''}">Task</li>`;
+        subitems += '</ul>';
+
+        li.innerHTML = `
+            <div class="topic-container">
+                <div class="topic-dropdown">
+                    <div class="topic">${padlockIcon}
+                        <p>${lesson.title}</p>
+                    </div>
+                    <div class="topic-header">${dropdownIcon}</div>
+                </div>
+                ${subitems}
+            </div>
+        `;
+
+        if (lesson.id > currentTopicId) li.classList.add("blocked");
+
+        const topicHeader = li.querySelector(".topic-header");
+        if (lesson.id <= currentTopicId && topicHeader) { // Only add click event for unlocked topics
+            topicHeader.addEventListener("click", (e) => {
+                e.preventDefault();
+                const dropdown = li.querySelector(".dropdown");
+                const arrow = li.querySelector(".dropdown-arrow");
+                if (dropdown && arrow) {
+                    if (dropdown.classList.contains("open")) {
+                        dropdown.classList.remove("open");
+                        arrow.setAttribute("icon", "mdi:chevron-down");
+                    } else {
+                        dropdown.classList.add("open");
+                        arrow.setAttribute("icon", "mdi:chevron-up");
+                    }
+                }
+            });
+        }
+
+        topicList.appendChild(li);
+    });
+
+    document.querySelectorAll(".dropdown li").forEach(item => {
+        item.addEventListener("click", (e) => {
+            e.stopPropagation();
+            const lessonIndex = parseInt(item.getAttribute("data-lesson-id"));
+            const subitem = item.getAttribute("data-subitem");
+            loadSubitem(lessonIndex, subitem);
+        });
+    });
+
+    updateCourseProgressBar();
+}
+
+let currentLessonIndex = 0;
+let currentSubitem = "";
+
+function loadSubitem(lessonIndex, subitem) {
+    currentLessonIndex = lessonIndex;
+    currentSubitem = subitem;
+    const lesson = lessons[lessonIndex];
+    const lessonTitle = document.getElementById("lesson-title");
+    const lessonContent = document.getElementById("lesson-content");
+    const currentTopicId = userDetails.currentTopicId;
+
+    if (lessonTitle) {
+        lessonTitle.textContent = subitem.startsWith("content-") 
+            ? `${lesson.title} - Slide ${parseInt(subitem.split('-')[1]) + 1}`
+            : subitem === "video" 
+                ? `${lesson.title} - Video`
+                : `${lesson.title} - Task`;
+    }
+
+    if (subitem.startsWith("content-")) {
+        if (lesson.id <= currentTopicId) {
+            const slideIndex = parseInt(subitem.split('-')[1]);
+            updateContentSlide(lesson, slideIndex);
+        } else {
+            lessonContent.innerHTML = `<p>This content is locked. Please complete the previous lessons to unlock this slide.</p>`;
+        }
+    } else if (subitem === "video") {
+        displayVideo(lesson);
+    } else if (subitem === "task") {
+        displayTaskSubmission(lesson);
+    }
+
+    updateNavigationButtons(lessonIndex, subitem);
+    highlightCurrentSubitem(lessonIndex, subitem);
+}
+
+function updateContentSlide(lesson, slideIndex) {
+    const lessonContent = document.getElementById("lesson-content");
+    if (!lessonContent) return;
+
+    lessonContent.innerHTML = "";
+
+    const contentWrapper = document.createElement("div");
+    contentWrapper.style.position = "relative";
+    contentWrapper.style.display = "flex";
+    contentWrapper.style.alignItems = "center";
+    contentWrapper.style.justifyContent = "center";
+
+    if (slideIndex > 0) {
+        const prevArrow = document.createElement("iconify-icon");
+        prevArrow.setAttribute("icon", "mdi:chevron-left");
+        prevArrow.classList.add("nav-arrow");
+        prevArrow.style.position = "absolute";
+        prevArrow.style.left = "10px";
+        prevArrow.style.fontSize = "30px";
+        prevArrow.style.cursor = "pointer";
+        prevArrow.style.color = "#f0f0f0";
+        prevArrow.addEventListener("click", () => loadSubitem(currentLessonIndex, `content-${slideIndex - 1}`));
+        contentWrapper.appendChild(prevArrow);
+    }
+
+    const img = document.createElement("img");
+    img.src = lesson.content[slideIndex];
+    img.alt = `${lesson.title} Slide ${slideIndex + 1}`;
+    img.style.maxWidth = "100%";
+    contentWrapper.appendChild(img);
+
+    if (slideIndex < lesson.content.length - 1) {
+        const nextArrow = document.createElement("iconify-icon");
+        nextArrow.setAttribute("icon", "mdi:chevron-right");
+        nextArrow.classList.add("nav-arrow");
+        nextArrow.style.position = "absolute";
+        nextArrow.style.right = "10px";
+        nextArrow.style.fontSize = "30px";
+        nextArrow.style.cursor = "pointer";
+        nextArrow.style.color = "#f0f0f0";
+        nextArrow.addEventListener("click", () => loadSubitem(currentLessonIndex, `content-${slideIndex + 1}`));
+        contentWrapper.appendChild(nextArrow);
+    }
+
+    lessonContent.appendChild(contentWrapper);
+}
+
+function displayVideo(lesson) {
+    const lessonContent = document.getElementById("lesson-content");
+    if (!lessonContent) return;
+
+    lessonContent.innerHTML = `
+        <h3>Video Resource</h3>
+        <p>Watch this video to reinforce your understanding:</p>
+        <div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; max-width: 100%;">
+            <iframe src="${lesson.videoLink.replace('watch?v=', 'embed/')}" frameborder="0" allowfullscreen style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"></iframe>
+        </div>
+    `;
+}
+
+function displayTaskSubmission(lesson) {
+    const lessonContent = document.getElementById("lesson-content");
+    if (!lessonContent) return;
+
+    lessonContent.innerHTML = `
+        <div style="display: grid; grid-template-columns: 1fr; gap: 20px; max-width: 80%; margin: 0 auto; padding: 20px; background-color: #f9f9f9; border-radius: 8px; box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);">
+            <h3 style="text-align: center; color: #333; margin-bottom: 20px;">Task Submission</h3>
+            <p>${lesson.task}</p>
+            <form id="task-submission-form" style="display: flex; flex-direction: column; gap: 15px;">
+                <div style="display: flex; justify-content: space-between; gap: 20px;">
+                    <label style="flex: 1; display: flex; align-items: center; font-size: 14px; color: #555;">
+                        <input type="radio" name="submission-type" value="file" checked style="margin-right: 8px;"> Upload Files (HTML required, CSS optional)
+                    </label>
+                    <label style="flex: 1; display: flex; align-items: center; font-size: 14px; color: #555;">
+                        <input type="radio" name="submission-type" value="text" style="margin-right: 8px;"> Enter Text
+                    </label>
+                </div>
+                <div id="submission-input">
+                    <div id="dropzone-upload" class="dropzone" style="border: 2px dashed #007bff; border-radius: 8px; padding: 20px; background-color: #fff; text-align: center; color: #666;"></div>
+                </div>
+                <button type="submit" class="next-btn" style="background-color: #007bff; color: #fff; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer; font-size: 16px; transition: background-color 0.3s;">Submit</button>
+            </form>
+        </div>
+    `;
+
+    const form = document.getElementById("task-submission-form");
+    const submissionInput = document.getElementById("submission-input");
+    const radioButtons = document.querySelectorAll('input[name="submission-type"]');
+
+    const dropzoneElement = document.getElementById("dropzone-upload");
+    const myDropzone = new Dropzone(dropzoneElement, {
+        url: "#",
+        acceptedFiles: ".html,.css",
+        maxFiles: 2,
+        dictDefaultMessage: "Drag and drop your HTML and CSS files here or click to upload<br>(HTML required, CSS optional)",
+        autoProcessQueue: false,
+    });
+
+    radioButtons.forEach((radio) => {
+        radio.addEventListener("change", (e) => {
+            if (e.target.value === "file") {
+                submissionInput.innerHTML = `
+                    <div id="dropzone-upload" class="dropzone" style="border: 2px dashed #007bff; border-radius: 8px; padding: 20px; background-color: #fff; text-align: center; color: #666;"></div>
+                `;
+                const newDropzoneElement = document.getElementById("dropzone-upload");
+                new Dropzone(newDropzoneElement, {
+                    url: "#",
+                    acceptedFiles: ".html,.css",
+                    maxFiles: 2,
+                    dictDefaultMessage: "Drag and drop your HTML and CSS files here or click to upload<br>(HTML required, CSS optional)",
+                    autoProcessQueue: false,
+                });
+            } else {
+                submissionInput.innerHTML = `
+                    <textarea id="text-submission" rows="6" style="width: 100%; padding: 15px; border: 1px solid #ccc; border-radius: 5px; font-size: 14px; color: #333; resize: vertical; box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);"></textarea>
+                `;
+            }
+        });
+    });
+
+    form.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        const submissionType = document.querySelector('input[name="submission-type"]:checked').value;
+    
+        let payload = {
+            query: null,
+            files: [],
+            criteria: lesson.criteria || "Evaluate the code based on correctness, structure, and best practices.",
+            userId: userDetails.id,
+            currentTopicId: lesson.id,
+            lastTaskId: userDetails.lastTaskId || 0,
+        };
+    
+        if (submissionType === "file") {
+            if (myDropzone.files.length === 0) {
+                alert("Please upload at least one HTML file.");
+                return;
+            }
+            payload.files = myDropzone.files.map((file) => ({
+                originalname: file.name,
+                buffer: file,
+            }));
+        } else {
+            const textSubmission = document.getElementById("text-submission")?.value;
+            if (!textSubmission) {
+                alert("Please enter some text to submit.");
+                return;
+            }
+            payload.query = textSubmission;
+        }
+    
+        const headers = {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${accessToken}`,
+        };
+    
+        try {
+            const response = await apiRequest(endpoints.submitTask, "POST", payload, headers, "Submit Task");
+    
+            if (response.updatedUser) {
+                // Update session storage with new user details
+                sessionStorage.setItem("userDetails", JSON.stringify(response.updatedUser));
+                console.log('User updated in session storage');
+    
+                // Get the next lesson and update the topic id
+                const currentIndex = lessons.findIndex((l) => l.id === lesson.id);
+                if (currentIndex < lessons.length - 1) {
+                    const nextLessonId = lessons[currentIndex + 1].id;
+                    saveCurrentTopicId(nextLessonId);
+                }
+    
+                // Show modal with congratulatory message and score
+                createModal({
+                    title: "Submission Successful",
+                    message: `Passed!!!\n\nScore: ${response.score}\n\nGreat job! Let's move to the next topic.`,
+                    noConfirm: true,
+                });
+    
+                loadTopics(lessons);
+                loadSubitem(currentIndex, "task");
+    
+            } else {
+                // If user scored below average, display message and show hint
+                createModal({
+                    title: "Submission Failed",
+                    message: `Scored below average.\n\nScore: ${response.score}\n\nHint: ${response.hints}\n\nPlease try again.`,
+                    noConfirm: true,
+                });
+            }
+        } catch (error) {
+            console.error("Task submission failed:", error);
+        }
+    });
+}
+
+function highlightCurrentSubitem(lessonIndex, subitem) {
+    document.querySelectorAll(".dropdown li").forEach(item => {
+        item.classList.remove("active-subitem");
+        if (parseInt(item.getAttribute("data-lesson-id")) === lessonIndex && item.getAttribute("data-subitem") === subitem) {
+            item.classList.add("active-subitem");
+        }
+    });
+}
+
+function updateNavigationButtons(lessonIndex, subitem) {
+    const prevBtn = document.querySelector(".prev-btn");
+    const nextBtn = document.querySelector(".next-btn");
+    const lesson = lessons[lessonIndex];
+    const currentTopicId = userDetails.currentTopicId;
+
+    if (prevBtn && nextBtn) {
+        prevBtn.style.display = "none";
+        nextBtn.style.display = "none";
+
+        if (subitem.startsWith("content-")) {
+            const slideIndex = parseInt(subitem.split('-')[1]);
+            if (lesson.id <= currentTopicId) {
+                if (slideIndex > 0) {
+                    prevBtn.style.display = "block";
+                    prevBtn.textContent = "Previous Slide";
+                    prevBtn.onclick = () => loadSubitem(lessonIndex, `content-${slideIndex - 1}`);
+                } else if (lessonIndex > 0) {
+                    prevBtn.style.display = "block";
+                    prevBtn.textContent = "Previous Lesson Task";
+                    prevBtn.onclick = () => loadSubitem(lessonIndex - 1, "task");
+                }
+
+                if (slideIndex < lesson.content.length - 1) {
+                    nextBtn.style.display = "block";
+                    nextBtn.textContent = "Next Slide";
+                    nextBtn.onclick = () => loadSubitem(lessonIndex, `content-${slideIndex + 1}`);
+                } else {
+                    nextBtn.style.display = "block";
+                    nextBtn.textContent = "Go to Video";
+                    nextBtn.onclick = () => loadSubitem(lessonIndex, "video");
+                }
+            }
+        } else if (subitem === "video") {
+            prevBtn.style.display = "block";
+            prevBtn.textContent = lesson.content.length > 0 ? "Back to Last Slide" : (lessonIndex > 0 ? "Previous Lesson Task" : "");
+            prevBtn.onclick = () => loadSubitem(lessonIndex, lesson.content.length > 0 ? `content-${lesson.content.length - 1}` : (lessonIndex > 0 ? "task" : null));
+
+            nextBtn.style.display = "block";
+            nextBtn.textContent = "Go to Task";
+            nextBtn.onclick = () => loadSubitem(lessonIndex, "task");
+        } else if (subitem === "task") {
+            prevBtn.style.display = "block";
+            prevBtn.textContent = "Back to Video";
+            prevBtn.onclick = () => loadSubitem(lessonIndex, "video");
+
+            if (lessonIndex < lessons.length - 1) {
+                nextBtn.style.display = "block";
+                nextBtn.textContent = "Submit task";
+            }
+        }
+    }
+}
+
+function handleLogout() {
+    localStorage.removeItem("accessToken");
+    window.location.href = "/";
+}
+
+async function updateStartDate() {
+    const currentDate = new Date().toISOString().split("T")[0];
+    const payload = {
+        userId: userDetails.id,
+        startDate: currentDate,
+    };
+
+    const url = `${endpoints.startDate}/${userDetails.id}`;
+    const headers = {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${accessToken}`,
+    };
+
+    try {
+        const response = await apiRequest(url, "PATCH", payload, headers, "Start Lessons");
+        if (response.userId) {
+            const updatedUser = { ...userDetails, status: "active" };
+            sessionStorage.setItem("userDetails", JSON.stringify(updatedUser));
+        }
+        loadLessonsPage();
+        loadSubitem(0, "content-0"); // Load first lesson after starting
+    } catch (error) {
+        console.error("Error updating start date:", error);
+        createModal({
+            title: "Error",
+            message: "Failed to start your learning journey. Please try again.",
+            noConfirm: true,
+        });
+    }
 }
 
 function setupSettingsDropdown() {
@@ -454,6 +505,7 @@ function setupSettingsDropdown() {
     const settingsDropdown = document.getElementById("settings-dropdown");
     const userInfo = document.getElementById("user-info");
     const resetPasswordBtn = document.getElementById("reset-password-btn");
+
     if (userInfo) {
         userInfo.innerHTML = `
             <p><strong>Name:</strong> ${userDetails.firstName} ${userDetails.lastName || ""}</p>
@@ -505,9 +557,7 @@ function setupSettingsDropdown() {
 
 document.addEventListener("DOMContentLoaded", () => {
     const heading = document.getElementById("heading");
-    if (heading) {
-        heading.innerText = `Welcome to your learning dashboard, ${userDetails.firstName}`;
-    }
+    if (heading) heading.innerText = `Welcome to your learning dashboard, ${userDetails.firstName}`;
     loadWelcomePage();
     setupSettingsDropdown();
 });
