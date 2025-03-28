@@ -66,9 +66,9 @@ const profiles = [
   {
     name: "Daniel Ukpai",
     role: "Frontend developer/Cybersecurity analyst",
-    bio: "Daniel Ukpai is a highly skilled Frontend Developer and Cybersecurity Analyst from Nigeria, a recognized expert in crafting secure, user-focused web applications.  Certified Frontend Web Development Certificate from a leading Canadian institution, demonstrating proficiency in modern web technologies and best practices. Additionally, as a Cybersecurity Analyst I excel in identifying vulnerabilities and implementing advanced security protocols to protect critical systems and data, bringing a meticulous and innovative approach to both development and data protection",
+    bio: "Frontend Developer specialized in secure web applications, blending expertise in modern JavaScript frameworks with a strong foundation in Cybersecurity. Focused on building performant, accessible, and attack-resistant UIs,  advocates for security-first development practices without compromising user experience.",
     github: "https://github.com/dceetechbro",
-    twitter: "https://www.instagram.com/dcee_techbro?igsh=dWphbHlrcGQ1dmdl&utm_source=qr",
+    twitter: "https://x.com/dcee_techbro?s=21",
     facebook: "https://www.facebook.com/share/199auTVkwR/?mibextid=wwXIfr",
     image: "./assets/Daniel_Upkpai.jpeg"
   },
@@ -77,7 +77,7 @@ const profiles = [
     role: "Full-stack developer/Graphic designer",
     bio: "Bridging the gap between code and creativity, I'm a fullstack developer with a passion for crafting seamless user experiences. My background in UX/UI, graphic design, and motion graphics fuels my ability to build intuitive, visually stunning applications that resonate with users. I thrive on solving complex problems and transforming ideas into interactive realities.",
     github: "https://www.linkedin.com/in/daniel-iwu-186854152/",
-    twitter: "https://www.linkedin.com/in/daniel-iwu-186854152/",
+    twitter: "https://x.com/dcee_techbro?s=21",
     facebook: "https://www.linkedin.com/in/daniel-iwu-186854152/",
     image: "./assets/image1.png",
   },
@@ -186,14 +186,22 @@ function showProfileDetails(index, card) {
   const panelWidth = detailsPanel.offsetWidth || 400; // Default width if not yet rendered
   detailsPanel.style.position = 'absolute';
  // Check if the screen width is 1200px or less
-if (window.innerWidth <= 1200 && window.innerWidth > 769  ) {
+if (window.innerWidth <= 1200 && window.innerWidth >= 768  ) {
   // Set custom positions when the screen width is 1200px or less
-  detailsPanel.style.top = '520px'; // Set top position to 430px
-  detailsPanel.style.left = '92px'; // Set left position to 92px
-} else if(window.innerWidth <= 769) {
+  detailsPanel.style.top = '40%'; // Set top position to 430px
+  detailsPanel.style.left = '27%'; // Set left position to 92px
+} else if(window.innerWidth <= 768 && window.innerWidth > 498) {
+  // Set custom positions when the screen width is 1200px or less
+  detailsPanel.style.top = '40%'; // Set top position to 430px
+  detailsPanel.style.left = '18%'; // Set left position to 92px
+}else if(window.innerWidth <= 498) {
   // Set custom positions when the screen width is 1200px or less
   detailsPanel.style.top = '40%'; // Set top position to 430px
   detailsPanel.style.left = '20px'; // Set left position to 92px
+}else if(window.innerWidth <= 1400 && window.innerWidth >= 1200) {
+  // Set custom positions when the screen width is 1200px or less
+  detailsPanel.style.top = '45%'; // Set top position to 430px
+  detailsPanel.style.left = '10%'; // Set left position to 92px
 }else {
   // Default behavior for larger screens
   detailsPanel.style.top = `430px`; // 10px below the card

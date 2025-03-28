@@ -427,6 +427,13 @@ footer a:hover {
 }
 
 @media (max-width: 500px) {
+
+  .text-section, .developers {
+    color: #1856B4;
+    transition: all 0.5s ease-in-out;
+    box-shadow: none;
+    border: #1856B4 1px solid;
+  }
   .illustration-section {
     display: none;
   }
@@ -618,7 +625,7 @@ footer a:hover {
 }
 
 .background-name {
-  font-size: 8em;
+  font-size: 6em;
   font-weight: 700;
   width: 100vw;
 }
