@@ -240,7 +240,7 @@ h1 {
   justify-content: center;
   align-items: center;
   gap: 60px;
-  max-width: 85%;
+  max-width: 95%;
   width: 100%;
   margin-bottom: 50px;
 }
@@ -428,12 +428,6 @@ footer a:hover {
 
 @media (max-width: 500px) {
 
-  .text-section, .developers {
-    color: #1856B4;
-    transition: all 0.5s ease-in-out;
-    box-shadow: none;
-    border: #1856B4 1px solid;
-  }
   .illustration-section {
     display: none;
   }
@@ -463,6 +457,13 @@ footer a:hover {
 @media (max-width: 769px) {
   .mobile-menu {
     gap: 5px;
+  }
+
+  .text-section, .developers {
+    color: #1856B4;
+    transition: all 0.5s ease-in-out;
+    box-shadow: none;
+    border: #1856B4 1px solid;
   }
 
   .profile-image {

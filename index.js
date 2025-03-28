@@ -186,22 +186,26 @@ function showProfileDetails(index, card) {
   const panelWidth = detailsPanel.offsetWidth || 400; // Default width if not yet rendered
   detailsPanel.style.position = 'absolute';
  // Check if the screen width is 1200px or less
-if (window.innerWidth <= 1200 && window.innerWidth >= 768  ) {
+if (window.innerWidth <= 1200 && window.innerWidth >= 1024  ) {
   // Set custom positions when the screen width is 1200px or less
   detailsPanel.style.top = '40%'; // Set top position to 430px
   detailsPanel.style.left = '27%'; // Set left position to 92px
-} else if(window.innerWidth <= 768 && window.innerWidth > 498) {
+} else if(window.innerWidth <= 860 && window.innerWidth > 601) {
   // Set custom positions when the screen width is 1200px or less
   detailsPanel.style.top = '40%'; // Set top position to 430px
   detailsPanel.style.left = '18%'; // Set left position to 92px
 }else if(window.innerWidth <= 498) {
   // Set custom positions when the screen width is 1200px or less
-  detailsPanel.style.top = '40%'; // Set top position to 430px
+  detailsPanel.style.top = '35%'; // Set top position to 430px
   detailsPanel.style.left = '20px'; // Set left position to 92px
+}else if(window.innerWidth >= 499 && window.innerWidth < 601) {
+  // Set custom positions when the screen width is 1200px or less
+  detailsPanel.style.top = '40%'; // Set top position to 430px
+  detailsPanel.style.left = '4%'; // Set left position to 92px
 }else if(window.innerWidth <= 1400 && window.innerWidth >= 1200) {
   // Set custom positions when the screen width is 1200px or less
-  detailsPanel.style.top = '45%'; // Set top position to 430px
-  detailsPanel.style.left = '10%'; // Set left position to 92px
+  detailsPanel.style.top = '60%'; // Set top position to 430px
+  detailsPanel.style.left = '32%'; // Set left position to 92px
 }else {
   // Default behavior for larger screens
   detailsPanel.style.top = `430px`; // 10px below the card

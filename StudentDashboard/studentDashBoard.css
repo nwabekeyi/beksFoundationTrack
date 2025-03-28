@@ -41,6 +41,10 @@ p {
     color: #6B6B6B;
 }
 
+
+.menu-icon {
+    display: hidden;
+  }
 .logo {
     height: 40px;
     margin-right: 10px;
@@ -126,14 +130,16 @@ progress::-moz-progress-bar {
 .settings-dropdown {
     position: absolute;
     top: calc(100% + 5px);
-    right: 20px;
+    right: 2%;
     background-color: #fff;
     border: 1px solid #ddd;
     border-radius: 5px;
-    padding: 15px;
+    padding: 5px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     z-index: 1000;
     width: 250px;
+    flex-direction: column;
+    height: auto;
 }
 
 .settings-dropdown p {
@@ -145,7 +151,7 @@ progress::-moz-progress-bar {
 
 .settings-dropdown button {
     width: 100%;
-    padding: 10px;
+    padding: 15px;
     background-color: #1856B4;
     color: white;
     border: none;
@@ -169,10 +175,20 @@ progress::-moz-progress-bar {
 
 .sidebar {
     width: 22%;
-    background-color: #f8f9fa;
-    padding: 15px;
+    padding: 20px;
     overflow-y: auto;
     border-right: 1px solid #e0e0e0;
+    border-radius: 10px;
+    margin: 5px;
+    /* Hide scrollbar for Webkit browsers (Chrome, Safari) */
+    -webkit-overflow-scrolling: touch; /* Optional: Improves scrolling on touch devices */
+    scrollbar-width: none; /* Hide scrollbar for Firefox */
+    -ms-overflow-style: none; /* Hide scrollbar for IE/Edge */
+}
+
+/* Additional rule for Webkit browsers to hide the scrollbar */
+.sidebar::-webkit-scrollbar {
+    display: none;
 }
 
 .sidebar ul {
@@ -191,6 +207,9 @@ progress::-moz-progress-bar {
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
 
+#topic-list li{
+    padding: 20px;
+}
 .topic-container {
     padding: 12px;
     display: flex;
@@ -294,6 +313,7 @@ progress::-moz-progress-bar {
     height: auto;
     display: grid;
     place-content: center;
+    min-height: 100vh;
 }
 
 .welcome-container h2 {
@@ -406,4 +426,131 @@ progress::-moz-progress-bar {
     color: #666;
     display: flex;
     align-items: center;
+}
+
+.settings-option{
+    color: #666;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    margin-bottom: 5px;
+}
+
+#reset-password{
+    margin-bottom: 0;
+}
+/* .s
+media queries */
+@media (max-width: 1200px) {
+    #topic-list li{
+        padding: 10px;
+        width: 30vw;
+    }
+    .sidebar {
+        position: fixed;
+        top: 5%;
+        left: -35%; /* Off-screen by default */
+        height: 100%;
+        transition: transform 0.3s ease-in-out; /* Slide animation */
+        z-index: 1000;
+        background-color: #fff;
+        width: auto;
+    }
+
+    .sidebar.open {
+        transform: translateX(100%); /* Slide in */
+    }
+
+    .menu-icon {
+        display: block !important;
+        font-size: 30px;
+        color: #1856B4;
+        cursor: pointer;
+        transition: transform 0.5s ease;
+        margin-right: 20px;
+        cursor: pointer;
+      }
+
+      .menu-icon.rotated {
+        transform: rotate(45deg); /* Rotate 45 degrees when sidebar is open */
+    }
+      .header-left h1{
+        font-size: smaller;
+      }
+      .logo{
+        height: 30px;
+        width: 30px;
+      }
+      .course-progress label{
+        font-size: small;
+      }
+}
+
+
+  /* max-width 768 */
+  @media (max-width: 768px) {
+     
+    .header-left h1{
+      font-size:14px;
+    }
+    progress{
+        width: 120px;
+        height: 15px;
+    }
+  
+    .welcome-container {
+        height: 100%;
+        padding: 10px;
+      }
+
+      .welcome-container img {
+        width: 100%;
+      }
+}
+
+  /* max-width 768 */
+  @media (max-width: 600px) {
+
+    .header-left h1{
+      font-size:11px;
+    }
+    .course-progress{
+        display: none;
+        width: 150px;
+        height: 15px;
+    }
+
+    .logo{
+        width: 30px;
+        height: 30px;
+    }
+  .sidebar{
+    left: -70%;
+    top: 10%
+  }
+
+  #topic-list li{
+    width: 60vw;
+}
+.progress-text{
+    display: none;
+}
+
+  .welcome-container h2{
+    font-size: medium;
+  }
+
+  .welcome-container p{
+    font-size: small;
+  }
+}
+
+
+
+ /* max-width 375 */
+ @media (max-width: 498px) {
+    
+  .sidebar{
+    left: -73%;
+    top: 10%
+  }
+
 }

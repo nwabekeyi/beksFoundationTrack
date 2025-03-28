@@ -76,5 +76,21 @@
     </footer>
     <script src="index.js" type="module"></script>
     <script src="https://code.iconify.design/3/3.1.0/iconify.min.js"></script>
+    <!-- Register the service worker -->
+    <!-- <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/service-worker.js')
+                    .then((registration) => {
+                        console.log('Service Worker registered with scope:', registration.scope);
+                    })
+                    .catch((error) => {
+                        console.error('Service Worker registration failed:', error);
+                    });
+            });
+        } else {
+            console.log('Service Workers are not supported in this browser.');
+        }
+    </script> -->
 </body>
 </html>
