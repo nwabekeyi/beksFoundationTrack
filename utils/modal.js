@@ -18,7 +18,7 @@ export function createModal({ title, message, htmlContent, css, onConfirm, noCon
     const modalContent = document.createElement('div');
     modalContent.style.maxWidth = '80%';
     modalContent.style.maxHeight = '80%';
-    modalContent.style.width = '100%';
+    modalContent.style.width = 'auto';
     modalContent.style.height = 'auto';
     modalContent.style.display = 'flex';
     modalContent.style.flexDirection = 'column';

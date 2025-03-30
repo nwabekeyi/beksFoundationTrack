@@ -1,8 +1,8 @@
-// main.js
 import { getSessionData } from "../utils/getSessionData.js";
 import {
     loadWelcomePage,
-    setupSettingsDropdown
+    setupSettingsDropdown,
+    loadStatsPage // Import loadStatsPage
 } from './cores.js';
 
 const userDetails = getSessionData("userDetails");
@@ -53,6 +53,11 @@ window.addEventListener('resize', () => {
 document.addEventListener("DOMContentLoaded", () => {
     const heading = document.getElementById("heading");
     if (heading) heading.innerText = `Welcome to your learning dashboard, ${userDetails.firstName}`;
+    
+    // Load welcome page and settings dropdown
     loadWelcomePage();
     setupSettingsDropdown();
+    
+    // Load stats page (optional: comment out or tie to an event)
+    loadStatsPage(); // Loads stats immediately after welcome page
 });

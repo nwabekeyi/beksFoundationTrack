@@ -14,9 +14,9 @@ function saveCurrentTopicId(id) {
     localStorage.setItem("currentTopicId", id);
 }
 
-//update course progress
+// Update course progress
 function updateCourseProgressBar() {
-    const progress = userDetails.currentTopicId/lessons.length * 100;
+    const progress = userDetails.currentTopicId / lessons.length * 100;
     const progressBar = document.getElementById("course-progress-bar");
     const progressText = document.getElementById("course-progress-text");
     if (progressBar && progressText) {
@@ -25,8 +25,7 @@ function updateCourseProgressBar() {
     }
 };
 
-
-//load welcome page
+// Load welcome page
 function loadWelcomePage() {
     const topicList = document.getElementById("topic-list");
     const mainContent = document.getElementById("main-content");
@@ -50,7 +49,7 @@ function loadWelcomePage() {
         <iframe src="/videos/vscode-explainer.mp4" frameborder="0" allowfullscreen style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"></iframe>
     </div>
 ` : '';
-            mainContent.innerHTML = `
+        mainContent.innerHTML = `
             <div class="welcome-container">
                 <h2>Welcome, ${userDetails.firstName}!</h2>
                 <p>${welcomeText}</p>
@@ -73,7 +72,7 @@ function loadWelcomePage() {
     }
 
     if (homeItem) homeItem.addEventListener("click", loadWelcomePage);
-    if (statsItem) statsItem.addEventListener("click", () => { mainContent.innerHTML = "<h2>Stats</h2><p>Your learning statistics will be displayed here soon!</p>"; });
+    if (statsItem) statsItem.addEventListener("click", loadStatsPage); // Fixed to call loadStatsPage
     if (logoutItem) logoutItem.addEventListener("click", () => createModal({ title: "Confirm Logout", message: "Are you sure you want to logout?", onConfirm: handleLogout }));
     if (startLearningBtn) startLearningBtn.addEventListener("click", () => {
         if (userDetails.status === "active") {
@@ -86,9 +85,7 @@ function loadWelcomePage() {
     });
 }
 
-
-
-//load all lessons 
+// Load all lessons 
 function loadLessonsPage() {
     const mainContent = document.getElementById("main-content");
     if (!mainContent) return;
@@ -107,8 +104,7 @@ function loadLessonsPage() {
     loadTopics(lessons);
 }
 
-
-//load all topics
+// Load all topics
 function loadTopics(lessonsArray) {
     const topicList = document.getElementById("topic-list");
     if (!topicList) return;
@@ -124,12 +120,10 @@ function loadTopics(lessonsArray) {
         const dropdownIcon = lesson.id <= currentTopicId ? '<iconify-icon icon="mdi:chevron-down" class="dropdown-arrow"></iconify-icon>' : '';
         let subitems = '<ul class="dropdown">';
 
-        // Add all slides for every topic
         lesson.content.forEach((_, subIndex) => {
             subitems += `<li data-lesson-id="${index}" data-subitem="content-${subIndex}" class="${currentLessonIndex === index && currentSubitem === `content-${subIndex}` ? 'active-subitem' : ''}">Lesson ${subIndex + 1}</li>`;
         });
 
-        // Add Video and Task for every topic
         subitems += `<li data-lesson-id="${index}" data-subitem="video" class="${currentLessonIndex === index && currentSubitem === 'video' ? 'active-subitem' : ''}">Video</li>`;
         subitems += `<li data-lesson-id="${index}" data-subitem="task" class="${currentLessonIndex === index && currentSubitem === 'task' ? 'active-subitem' : ''}">Task</li>`;
         subitems += '</ul>';
@@ -149,7 +143,7 @@ function loadTopics(lessonsArray) {
         if (lesson.id > currentTopicId) li.classList.add("blocked");
 
         const topicHeader = li.querySelector(".topic-header");
-        if (lesson.id <= currentTopicId && topicHeader) { // Only add click event for unlocked topics
+        if (lesson.id <= currentTopicId && topicHeader) {
             topicHeader.addEventListener("click", (e) => {
                 e.preventDefault();
                 const dropdown = li.querySelector(".dropdown");
@@ -181,7 +175,7 @@ function loadTopics(lessonsArray) {
     updateCourseProgressBar();
 }
 
-//load subitems 
+// Load subitems 
 function loadSubitem(lessonIndex, subitem) {
     currentLessonIndex = lessonIndex;
     currentSubitem = subitem;
@@ -262,7 +256,7 @@ function updateContentSlide(lesson, slideIndex) {
     lessonContent.appendChild(contentWrapper);
 }
 
-//load video
+// Load video
 function displayVideo(lesson) {
     const lessonContent = document.getElementById("lesson-content");
     if (!lessonContent) return;
@@ -276,9 +270,7 @@ function displayVideo(lesson) {
     `;
 }
 
-
-//display tasks
-
+// Display tasks
 function displayTaskSubmission(lesson) {
     const lessonContent = document.getElementById("lesson-content");
     if (!lessonContent) return;
@@ -379,18 +371,15 @@ function displayTaskSubmission(lesson) {
             const response = await apiRequest(endpoints.submitTask, "POST", payload, headers, "Submit Task");
     
             if (response.updatedUser) {
-                // Update session storage with new user details
                 sessionStorage.setItem("userDetails", JSON.stringify(response.updatedUser));
                 console.log('User updated in session storage');
     
-                // Get the next lesson and update the topic id
                 const currentIndex = lessons.findIndex((l) => l.id === lesson.id);
                 if (currentIndex < lessons.length - 1) {
                     const nextLessonId = lessons[currentIndex + 1].id;
                     saveCurrentTopicId(nextLessonId);
                 }
     
-                // Show modal with congratulatory message and score
                 createModal({
                     title: "Submission Successful",
                     message: `Passed!!!\n\nScore: ${response.score}\n\nGreat job! Let's move to the next topic.`,
@@ -401,7 +390,6 @@ function displayTaskSubmission(lesson) {
                 loadSubitem(currentIndex, "task");
     
             } else {
-                // If user scored below average, display message and show hint
                 createModal({
                     title: "Submission Failed",
                     message: `Scored below average.\n\nScore: ${response.score}\n\nHint: ${response.hints}\n\nPlease try again.`,
@@ -423,9 +411,7 @@ function highlightCurrentSubitem(lessonIndex, subitem) {
     });
 }
 
-//update nav button
-
-
+// Update nav button
 function updateNavigationButtons(lessonIndex, subitem) {
     const prevBtn = document.querySelector(".prev-btn");
     const nextBtn = document.querySelector(".next-btn");
@@ -480,14 +466,13 @@ function updateNavigationButtons(lessonIndex, subitem) {
     }
 }
 
-
-//handle logout
+// Handle logout
 function handleLogout() {
     localStorage.removeItem("accessToken");
     window.location.href = "/";
 }
 
-//update start date
+// Update start date
 async function updateStartDate() {
     const currentDate = new Date().toISOString().split("T")[0];
     const payload = {
@@ -508,7 +493,7 @@ async function updateStartDate() {
             sessionStorage.setItem("userDetails", JSON.stringify(updatedUser));
         }
         loadLessonsPage();
-        loadSubitem(0, "content-0"); // Load first lesson after starting
+        loadSubitem(0, "content-0");
     } catch (error) {
         console.error("Error updating start date:", error);
         createModal({
@@ -519,8 +504,7 @@ async function updateStartDate() {
     }
 }
 
-
-// popup settings
+// Popup settings
 function setupSettingsDropdown() {
     const settingsIcon = document.getElementById("settings-icon");
     const settingsDropdown = document.getElementById("settings-dropdown");
@@ -550,7 +534,6 @@ function setupSettingsDropdown() {
             </ul>
         `;
 
-        // Add hover effects
         const options = settingsDropdown.querySelectorAll(".settings-option");
         options.forEach(option => {
             option.addEventListener("mouseover", () => {
@@ -567,14 +550,12 @@ function setupSettingsDropdown() {
     }
 
     if (settingsIcon && settingsDropdown) {
-        // Toggle dropdown on settings icon click
         settingsIcon.addEventListener("click", (e) => {
-            e.stopPropagation(); // Prevent click from bubbling to document
+            e.stopPropagation();
             settingsDropdown.style.display = settingsDropdown.style.display === "block" ? "none" : "block";
-            console.log(settingsDropdown.style.display)
+            console.log(settingsDropdown.style.display);
         });
 
-        // Close dropdown when clicking outside
         document.addEventListener("click", (e) => {
             if (!settingsIcon.contains(e.target) && !settingsDropdown.contains(e.target)) {
                 settingsDropdown.style.display = "none";
@@ -582,7 +563,6 @@ function setupSettingsDropdown() {
         });
     }
 
-    // Add event listeners for settings options
     const viewProfileOption = document.getElementById("view-profile");
     const appSettingsOption = document.getElementById("app-settings");
     const resetPasswordOption = document.getElementById("reset-password");
@@ -601,7 +581,7 @@ function setupSettingsDropdown() {
                 `,
                 noConfirm: true
             });
-            settingsDropdown.style.display = "none"; // Close dropdown after selection
+            settingsDropdown.style.display = "none";
         });
     }
 
@@ -633,7 +613,7 @@ function setupSettingsDropdown() {
                     closeModal(modal);
                 });
             }
-            settingsDropdown.style.display = "none"; // Close dropdown after selection
+            settingsDropdown.style.display = "none";
         });
     }
 
@@ -666,11 +646,137 @@ function setupSettingsDropdown() {
                     }
                 });
             }
-            settingsDropdown.style.display = "none"; // Close dropdown after selection
+            settingsDropdown.style.display = "none";
         });
     }
 }
+
+function loadStatsPage() {
+    const mainContent = document.getElementById("main-content");
+    if (!mainContent) return;
+
+    // Calculate stats
+    const completedLessons = userDetails.currentTopicId;
+    const totalLessons = lessons.length;
+    const progressPercentage = (completedLessons / totalLessons) * 100;
+    const totalScore = userDetails.totalScore || 0;
+    const averageScore = userDetails.averageScore || 0;
+
+    mainContent.innerHTML = `
+        <div class="stats-container" style="padding: 20px; max-width: 1200px; margin: 0 auto;">
+            <h2 style="text-align: center; color: #333; margin-bottom: 30px;">Your Learning Stats</h2>
+            <div class="stats-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px;">
+                <div class="stat-card" style="background: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);">
+                    <h3 style="color: #0e3b7a; margin-bottom: 15px; text-align: center;">Lessons Progress</h3>
+                    <canvas id="lessonsChart" style="max-height: 200px;"></canvas>
+                    <p style="text-align: center; margin-top: 10px; color: #666;">${completedLessons} / ${totalLessons} lessons</p>
+                </div>
+                <div class="stat-card" style="background: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);">
+                    <h3 style="color: #0e3b7a; margin-bottom: 15px; text-align: center;">Total Score</h3>
+                    <canvas id="totalScoreChart" style="max-height: 200px;"></canvas>
+                    <p style="text-align: center; margin-top: 10px; color: #666;">${totalScore} points</p>
+                </div>
+                <div class="stat-card" style="background: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);">
+                    <h3 style="color: #0e3b7a; margin-bottom: 15px; text-align: center;">Average Score</h3>
+                    <canvas id="averageScoreChart" style="max-height: 200px;"></canvas>
+                    <p style="text-align: center; margin-top: 10px; color: #666;">${averageScore} / 100</p>
+                </div>
+                <div class="stat-card" style="background: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);">
+                    <h3 style="color: #0e3b7a; margin-bottom: 15px; text-align: center;">Progress</h3>
+                    <canvas id="progressChart" style="max-height: 200px;"></canvas>
+                    <p style="text-align: center; margin-top: 10px; color: #666;">${parseInt(progressPercentage)}%</p>
+                </div>
+            </div>
+        </div>
+    `;
+
+    // Lessons Progress Chart (Bar)
+    const lessonsCtx = document.getElementById("lessonsChart").getContext("2d");
+    new Chart(lessonsCtx, {
+        type: "bar",
+        data: {
+            labels: ["Completed", "Remaining"],
+            datasets: [{
+                label: "Lessons",
+                data: [completedLessons, totalLessons - completedLessons],
+                backgroundColor: ["#007bff", "#e0e0e0"],
+                borderColor: ["#0056b3", "#b0b0b0"],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            scales: {
+                y: { beginAtZero: true, max: totalLessons, ticks: { stepSize: 1 }, title: { display: true, text: "Lessons" } }
+            },
+            plugins: { legend: { display: false }, tooltip: { callbacks: { label: (context) => `${context.raw} lessons` } } }
+        }
+    });
+
+    // Total Score Chart (Bar)
+    const totalScoreCtx = document.getElementById("totalScoreChart").getContext("2d");
+    new Chart(totalScoreCtx, {
+        type: "bar",
+        data: {
+            labels: ["Total Score"],
+            datasets: [{
+                label: "Score",
+                data: [totalScore],
+                backgroundColor: "#28a745",
+                borderColor: "#1e7e34",
+                borderWidth: 1
+            }]
+        },
+        options: {
+            scales: {
+                y: { beginAtZero: true, title: { display: true, text: "Points" } }
+            },
+            plugins: { legend: { display: false }, tooltip: { callbacks: { label: (context) => `${context.raw} points` } } }
+        }
+    });
+
+    // Average Score Chart (Bar)
+    const averageScoreCtx = document.getElementById("averageScoreChart").getContext("2d");
+    new Chart(averageScoreCtx, {
+        type: "bar",
+        data: {
+            labels: ["Average Score", "Max"],
+            datasets: [{
+                label: "Score",
+                data: [averageScore, 100 - averageScore],
+                backgroundColor: ["#ffc107", "#e0e0e0"],
+                borderColor: ["#e0a800", "#b0b0b0"],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            scales: {
+                y: { beginAtZero: true, max: 100, title: { display: true, text: "Score" } }
+            },
+            plugins: { legend: { display: false }, tooltip: { callbacks: { label: (context) => `${context.raw} / 100` } } }
+        }
+    });
+
+    // Progress Chart (Doughnut)
+    const progressCtx = document.getElementById("progressChart").getContext("2d");
+    new Chart(progressCtx, {
+        type: "doughnut",
+        data: {
+            labels: ["Completed", "Remaining"],
+            datasets: [{
+                data: [progressPercentage, 100 - progressPercentage],
+                backgroundColor: ["#17a2b8", "#e0e0e0"],
+                borderColor: ["#117a8b", "#b0b0b0"],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            plugins: { legend: { display: false }, tooltip: { callbacks: { label: (context) => `${parseInt(context.raw)}%` } } }
+        }
+    });
+}
+
 export {
     loadWelcomePage,
-    setupSettingsDropdown
-}
+    setupSettingsDropdown,
+    loadStatsPage
+};
