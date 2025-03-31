@@ -6,7 +6,48 @@
 }
 
 body {
+  width: 100%;
+  overflow-x: hidden;
   background: #f5f5f5;
+  opacity: 0; /* Start hidden for fade-in */
+  animation: fadeInPage 1s ease-in-out forwards; /* Fade in entire page */
+}
+
+h1, h2, h3, p{
+  font-family: 'Poppins', Arial, sans-serif;
+
+}
+
+/* Keyframes for animations */
+@keyframes fadeInPage {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideUpFade {
+  from { opacity: 0; transform: translateY(50px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slideLeftFade {
+  from { opacity: 0; transform: translateX(-50px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes slideRightFade {
+  from { opacity: 0; transform: translateX(50px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes bounceFade {
+  0% { opacity: 0; transform: scale(0.8); }
+  60% { opacity: 1; transform: scale(1.05); }
+  100% { opacity: 1; transform: scale(1); }
+}
+
+@keyframes scaleFade {
+  from { opacity: 0; transform: scale(0.9); }
+  to { opacity: 1; transform: scale(1); }
 }
 
 /* Main Navbar (visible on desktop) */
@@ -19,6 +60,8 @@ header {
   position: absolute;
   width: 100%;
   margin-bottom: 0;
+  animation: slideUpFade 0.8s ease-out; /* Navbar slides up */
+  z-index: 1000; /* Above content but below potential loader */
 }
 
 .header-left h1 {
@@ -38,7 +81,7 @@ header {
   font-size: 14px;
   font-weight: 500;
   cursor: pointer;
-  transition: background-color 0.3s ease;
+  transition: background-color 0.3s ease, transform 0.3s ease;
   text-decoration: none;
 }
 
@@ -65,9 +108,9 @@ button:hover, .login-btn:hover {
 
 /* Mobile Navbar (hidden by default, visible on mobile) */
 .mobile-navbar {
-  display: none; /* Hidden on desktop */
+  display: none;
   align-items: center;
-  justify-content: space-between; /* Logo/name on left, menu icon on right */
+  justify-content: space-between;
   position: fixed;
   top: 0;
   left: 0;
@@ -75,6 +118,7 @@ button:hover, .login-btn:hover {
   background-color: #000;
   z-index: 1000;
   padding: 10px 20px;
+  animation: slideUpFade 0.8s ease-out; /* Mobile navbar slides up */
 }
 
 .mobile-header-left {
@@ -91,33 +135,34 @@ button:hover, .login-btn:hover {
   font-size: 18px;
   color: white;
   margin-left: 10px;
+
 }
 
 .menu-icon {
   font-size: 30px;
   color: white;
   cursor: pointer;
-  transition: transform 0.5s ease; /* Slow animation for icon, controlled by JS */
+  transition: transform 0.5s ease;
 }
 
 .mobile-menu {
   position: absolute;
-  top: 60px; /* Below navbar */
+  top: 60px;
   left: 0;
   width: 100%;
   background-color: #000;
   padding: 10px 20px;
   flex-direction: column;
   gap: 10px;
-  display: none; /* Hidden initially */
-  height: 0; /* Start with zero height */
-  overflow: hidden; /* Hide content when collapsed */
-  transition: height 0.5s ease-in-out; /* Slow slide animation */
+  display: none;
+  height: 0;
+  overflow: hidden;
+  transition: height 0.5s ease-in-out;
 }
 
 .mobile-menu.active {
-  display: flex; /* Show when active */
-  height: 120px; /* Slide to this height */
+  display: flex;
+  height: 120px;
 }
 
 .mobile-nav-btn {
@@ -144,15 +189,15 @@ button:hover, .login-btn:hover {
 /* Hide main navbar and show mobile navbar on mobile screens */
 @media (max-width: 768px) {
   header {
-    display: none; /* Hide main navbar */
+    display: none;
   }
 
   .mobile-navbar {
-    display: flex; /* Show mobile navbar */
+    display: flex;
   }
 }
 
-/* Rest of your existing styles */
+/* Main content */
 main {
   display: flex;
   flex-direction: column;
@@ -167,7 +212,9 @@ main {
   font-family: 'Poppins', cursive;
   text-align: center;
   padding: 3% 0;
-  margin-bottom: 40px;
+  margin-bottom: 50px;
+  animation: slideUpFade 1s ease-out 0.5s forwards; /* Hero slides up after page fade */
+  opacity: 0; /* Start hidden */
 }
 
 .hero-content h1 {
@@ -193,8 +240,9 @@ h1 {
   justify-content: center;
   align-items: center;
   gap: 60px;
-  max-width: 85%;
+  max-width: 95%;
   width: 100%;
+  margin-bottom: 50px;
 }
 
 .article {
@@ -203,24 +251,37 @@ h1 {
   gap: 10px;
 }
 
-.text-section, .developers {
-  box-shadow: 0 4px 10px rgba(123, 123, 123, 0.2);
+.text-section {
   padding: 1em;
   border-radius: 10px;
   flex: 1;
   cursor: pointer;
+  animation: slideLeftFade 1s ease-out 1s forwards; /* Slide from left */
+  opacity: 0; /* Start hidden */
+}
+
+.developers {
+  padding: 1em;
+  border-radius: 10px;
+  flex: 1;
+  cursor: pointer;
+  animation: slideRightFade 1s ease-out 1.2s forwards; /* Slide from right, staggered */
+  opacity: 0; /* Start hidden */
 }
 
 .text-section:hover, .developers:hover {
-  transform: scale(1.05);
+  transform: scale(1.05) !important;
   color: #1856B4;
-  transition: all 0.3s ease-in-out;
+  transition: all 0.5s ease-in-out;
   box-shadow: none;
   border: #1856B4 1px solid;
 }
 
 .text-content {
   color: #6B6B6B;
+  text-align: left;
+  padding: 0;
+  width: 100%;
 }
 
 .section {
@@ -244,12 +305,6 @@ h1 {
   margin-bottom: 10px;
 }
 
-.section p {
-  font-size: 16px;
-  color: #666;
-  margin-bottom: 5.5px;
-}
-
 .action-btn {
   margin-top: 1.8em;
   padding: 10px 20px;
@@ -257,7 +312,7 @@ h1 {
   font-size: 14px;
   font-weight: 500;
   cursor: pointer;
-  transition: background-color 0.3s ease;
+  transition: background-color 0.3s ease, transform 0.3s ease;
 }
 
 .see-brochure-btn {
@@ -276,6 +331,8 @@ h1 {
   flex: 1;
   text-align: center;
   position: relative;
+  animation: bounceFade 1s ease-out 1.5s forwards; /* Bounce in */
+  opacity: 0; /* Start hidden */
 }
 
 .illustration-section img {
@@ -292,7 +349,7 @@ h1 {
 
 .illustration-section img:hover {
   transform: none;
-  transition: background-color 0.3s ease;
+  transition: transform 0.3s ease, background-color 0.3s ease;
 }
 
 footer {
@@ -300,6 +357,9 @@ footer {
   background-color: transparent;
   color: #666;
   font-size: 12px;
+  padding: 20px;
+  animation: slideUpFade 1s ease-out 2s forwards; /* Footer slides up last */
+  opacity: 0; /* Start hidden */
 }
 
 footer a {
@@ -312,7 +372,7 @@ footer a:hover {
   text-decoration: underline;
 }
 
-/* Existing mobile adjustments */
+/* Mobile adjustments */
 @media (max-width: 320px) {
   .mobile-navbar {
     padding: 10px 15px;
@@ -328,15 +388,13 @@ footer a:hover {
   }
 
   .mobile-menu.active {
-    height: 100px; /* Adjusted for smaller screen */
+    height: 100px;
   }
-
 
   h1 {
     font-size: 32px;
     margin-bottom: 20px;
   }
-
 
   .content {
     flex-direction: column;
@@ -357,14 +415,6 @@ footer a:hover {
     transform: rotate(0deg);
   }
 
-  .section h2 {
-    font-size: 18px;
-  }
-
-  .section p {
-    font-size: 13px;
-  }
-
   .action-btn {
     padding: 6px 12px;
     font-size: 11px;
@@ -378,10 +428,30 @@ footer a:hover {
 
 @media (max-width: 500px) {
 
-
   .illustration-section {
-  display: none;
+    display: none;
   }
+
+  .profile-image-details{
+    top: -40px !important;
+  }
+
+  .dev-title{
+    font-size: 1.5em !important;
+  }
+
+  .profile-name{
+    font-size: 0.5em !important;
+  }
+
+  .profile-details{
+    width: 90vw !important;
+  }
+
+  .background-role{
+    font-size: 0.8em !important;
+  }
+
 }
 
 @media (max-width: 769px) {
@@ -389,11 +459,47 @@ footer a:hover {
     gap: 5px;
   }
 
+  .text-section, .developers {
+    color: #1856B4;
+    transition: all 0.5s ease-in-out;
+    box-shadow: none;
+    border: #1856B4 1px solid;
+  }
+
+  .profile-image {
+    width: 65px !important;
+    height: 65px !important;
+  }
+  .profiles-wrapper{
+    padding: 0 1em !important;
+  }
+
+  .name-socials h2{
+    font-size: 0.8em;
+  }
+
+  .profile-image-details img{
+    width: 125px !important;
+    height: 120px !important;
+  }
+
+  .name-socials p{
+    font-size: 0.7em !important;
+  }
+
+  .dev-title{
+    font-size: 1.5em !important;
+  }
+
+   .background-name{
+    font-size: 3.5em !important;
+    line-height: 1.2;
+  }
+
   main {
     padding: 70px 10px 20px;
     width: 100%;
   }
-  
 
   .content {
     flex-direction: column;
@@ -412,19 +518,11 @@ footer a:hover {
   }
 
   .mobile-menu.active {
-    height: 110px; /* Adjusted for medium screen */
+    height: 110px;
   }
 
   h1 {
     font-size: 24px;
-  }
-
-  .section h2 {
-    font-size: 16px;
-  }
-
-  .section p {
-    font-size: 12px;
   }
 
   .illustration-section img {
@@ -437,10 +535,9 @@ footer a:hover {
   }
 
   .illustration-section {
-  display: none;
+    display: none;
   }
 }
-
 
 @media (max-width: 1040px) {
   .mobile-menu {
@@ -452,11 +549,292 @@ footer a:hover {
     width: 100%;
   }
 
-  .hero-content{
+  .hero-content {
     padding: 20px;
   }
 
   .illustration-section {
-  display: none;
+    display: none;
   }
+
+  .background-name{
+    font-size: 4em;
+  }
+}
+
+
+@media (max-width: 1200px) {
+
+  .team-section {
+    
+    height: 100vh;
+  }
+
+  .background-layer {
+    background-position: center !important; /* Further adjustment for very small screens */
+  }
+
+  .profiles-wrapper {
+    gap: 0 !important;
+    padding: 2rem;
+
+}
+}
+
+
+
+/* Team Section */
+.team-section {
+  display: flex;
+  align-items: flex-end;
+  background: white;
+  position: relative;
+  width: 100vw;
+  height: 105vh;
+  animation: slideUpFade 1s ease-out 2.5s forwards;
+  opacity: 0;
+}
+
+.background-layer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-size: cover;
+  background-repeat: no-repeat;
+  z-index: -1;
+  opacity: 0.7;
+  transition: background-image 0.5s ease-in-out, opacity 0.5s ease-in-out;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+
+.background-info {
+  text-align: center;
+  color: #fff;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+  height: 100%;
+  padding-top: 10%;
+}
+
+.dev-title{
+  color: #b0b6c2;
+  font-size: 3em;
+}
+
+.background-name {
+  font-size: 6em;
+  font-weight: 700;
+  width: 100vw;
+}
+
+.background-role {
+  font-size: 1.2rem;
+  font-weight: 400;
+  text-align: left;
+  padding-left: 10%;
+}
+
+.carousel-container {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  position: relative;
+  z-index: 1;
+}
+
+.profiles-wrapper {
+  display: flex;
+  justify-content: center;
+  gap: 10%;
+  padding: 2rem;
+  overflow: hidden;
+  position: relative;
+  width: 100%;
+}
+
+.profile-card {
+  width: 200px;
+  cursor: pointer;
+  transition: transform 5s ease; /* Apply transition only to transform */
+  position: relative;
+  animation: scaleFade 0.8s ease-out forwards;
+  opacity: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.profile-card:nth-child(1) { animation-delay: 3s; }
+.profile-card:nth-child(2) { animation-delay: 3.2s; }
+.profile-card:nth-child(3) { animation-delay: 3.4s; }
+.profile-card:nth-child(4) { animation-delay: 3.6s; }
+.profile-card:nth-child(5) { animation-delay: 3.8s; }
+
+.profile-card.active {
+  transform: scale(1.1);
+  z-index: 2;
+}
+
+.profile-card:hover {
+  transform: scale(1.1) !important; /* Combine translateY and scale */
+  transition: transform 5s ease-in-out !important; /* Apply smooth transition */
+}
+
+
+.name-socials h2{
+  color:#333;
+
+}
+
+.name-socials p{
+  color:#666;
+  font-size: 0.8em;
+
+}
+
+.name-socials{
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+
+}
+
+.profile-image {
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 1px solid #888888;
+  transition: all 0.3s ease;
+  border: none;
+
+}
+
+.profile-image-details {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  border: 1px solid #888888;
+  transition: all 0.3s ease;
+  border: none;
+  position: relative;
+  display: flex;
+  gap: 10px;
+  top: -70px;
+  align-items: flex-end;
+}
+
+.profile-image img{
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.profile-image-details img {
+  width: 155px;
+  height: 150px;
+  position: relative;
+}
+
+
+.profile-info {
+  text-align: center;
+  margin-top: 1rem;
+}
+
+.profile-name {
+  color: #333;
+  font-size: 0.9rem;
+  margin-bottom: 0.25rem;
+}
+
+
+.scroll-btn {
+  background: #1856B4;
+  border: none;
+  color: #ffffff;
+  width: 100px;
+  height: 35px;
+  cursor: pointer;
+  font-size: 2rem;
+  z-index: 3;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.bio{
+  color: #6B6B6B;
+  font-size: 0.8em;
+}
+.prev-btn { 
+  left: 5%;
+  border-top-left-radius: 20px;
+  border-bottom-left-radius: 20px;
+}
+.next-btn { 
+  right: 5%;
+  border-top-right-radius: 20px;
+  border-bottom-right-radius: 20px;
+}
+
+.nav-btn:hover {
+  background: #02102f;
+  color: #ffffff;
+}
+
+.profile-details {
+  position: absolute;
+  background: #efefef;
+  padding: 2rem 1em;
+  width: 500px;
+  opacity: 0;
+  transition: opacity 0.3s ease-in-out;
+  z-index: 10000;
+  box-shadow: 0 10px 30px #091a9980 !important;
+  height: fit-content;
+}
+
+.profile-details.active {
+  opacity: 1;
+}
+
+.close-btn {
+  position: absolute;
+  right: 1rem;
+  top: 1rem;
+  cursor: pointer;
+  color: #0336a3;
+  font-size: 1.5rem;
+}
+
+.social-links {
+  display: flex;
+  gap: 10px;
+}
+
+.social-icon {
+  color: #333;
+  transition: color 0.3s ease, transform 0.3s ease;
+}
+
+.social-icon:hover {
+  color: #1856B4;
+  transform: scale(1.1);
+}
+
+.navigation-buttons{
+  position: relative;
+  bottom: -50px;
+  display: flex;
+  justify-content: flex-end;
+  gap: 3px;
+  right: 10%;
 }

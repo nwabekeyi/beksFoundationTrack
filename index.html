@@ -46,18 +46,51 @@
                 </div>
                 <div class="section developers">
                     <h2>For Intermediates</h2>
-                    <p class="text-content">Join over group of developers, practice coding skills, prepare for interviews, and get hired. We got your back</p>
-                    <button class="action-btn sign-up-code-btn" onclick="window.location.href='register/register.html'">Sign Up & Code</button>
+                    <p class="text-content">Join our group of developers, practice coding skills, prepare for interviews, and get hired. We got your back</p>
+                    <button class="action-btn sign-up-code-btn" onclick="window.location.href='Auth/Signup/signUp.html'">Sign Up & Code</button>
                 </div>
             </div>
             <div class="illustration-section">
                 <img src="https://img.freepik.com/premium-vector/multinational-business-team_171919-1385.jpg" alt="Illustration">
             </div>
         </div>
+
+        <section class="team-section">
+            <div class="background-layer">
+                <div class="background-info">
+                    <h2 class="dev-title">Meet The Developers</h2>
+                    <h3 class="background-name"></h3>
+                    <p class="background-role"></p>
+                </div>
+            </div>
+            <div class="carousel-container">
+                <div class="profiles-wrapper">
+                    <!-- Profiles will be injected via JavaScript -->
+                </div>
+            </div>
+            <div class="profile-details"></div>
+        </section>
     </main>
     <footer>
         <p>Copyright © 2025 Beks Coding Club | <a href="#">Careers</a> | <a href="#">Privacy Policy</a></p>
     </footer>
     <script src="index.js" type="module"></script>
+    <script src="https://code.iconify.design/3/3.1.0/iconify.min.js"></script>
+    <!-- Register the service worker -->
+    <!-- <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/service-worker.js')
+                    .then((registration) => {
+                        console.log('Service Worker registered with scope:', registration.scope);
+                    })
+                    .catch((error) => {
+                        console.error('Service Worker registration failed:', error);
+                    });
+            });
+        } else {
+            console.log('Service Workers are not supported in this browser.');
+        }
+    </script> -->
 </body>
 </html>
