@@ -243,8 +243,17 @@ footer a:hover {
 
     }
 
+    @media (max-width: 800px) {
+
+        .checkbox-label span {
+            font-size: 0.6em;
+        }
+        }
+
 
 @media (max-width: 1040px) {
+
+    
 
     #register-from{
         width: 90%;
@@ -289,3 +298,9 @@ footer a:hover {
         }
 
         }
+
+        .error-message {
+            color: red;
+            font-size: 12px;
+            margin-top: 5px;
+          }

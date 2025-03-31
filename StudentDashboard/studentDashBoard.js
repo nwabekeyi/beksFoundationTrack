@@ -2,7 +2,6 @@ import { getSessionData } from "../utils/getSessionData.js";
 import {
     loadWelcomePage,
     setupSettingsDropdown,
-    loadStatsPage // Import loadStatsPage
 } from './cores.js';
 
 const userDetails = getSessionData("userDetails");
@@ -59,5 +58,4 @@ document.addEventListener("DOMContentLoaded", () => {
     setupSettingsDropdown();
     
     // Load stats page (optional: comment out or tie to an event)
-    loadStatsPage(); // Loads stats immediately after welcome page
 });

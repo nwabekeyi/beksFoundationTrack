@@ -78,8 +78,7 @@ const handleFormSubmissions = () => {
     }
 
     // Registration form handling
-    const registerForm = document.querySelector('.register-form'); // Using querySelector as requested
-    console.log('Register form found:', registerForm);
+    const registerForm = document.querySelector('.register-form'); 
 
     if (registerForm) {
       // Extract token and email from URL search params
@@ -106,7 +105,13 @@ const handleFormSubmissions = () => {
         const confirmPassword = document.querySelector('#confirm-password').value;
         const terms = document.querySelector('#terms').checked;
 
+        let errors = false;
+
         // Validation
+        // Clear previous errors
+        const errorMessages = document.querySelectorAll('.error-message');
+        errorMessages.forEach(msg => msg.remove());
+
         if (!firstName || !lastName || !phone || !email || !password || !confirmPassword || !terms) {
           showModal({
             title: 'Registration Error',
@@ -116,27 +121,52 @@ const handleFormSubmissions = () => {
           return;
         }
 
-        if (password !== confirmPassword) {
-          showModal({
-            title: 'Registration Error',
-            message: 'Passwords do not match.',
-            noConfirm: true
-          });
-          return;
+        // Password validation: Minimum 8 characters
+        if (password.length < 8) {
+          const passwordError = document.createElement('p');
+          passwordError.textContent = 'Password must be at least 8 characters long.';
+          passwordError.classList.add('error-message');
+          passwordInput.parentNode.appendChild(passwordError);
+          errors = true;
         }
 
-        if (!token) {
-          showModal({
-            title: 'Registration Error',
-            message: 'Registration token is missing. Please use a valid registration link.',
-            noConfirm: true
-          });
-          return;
+        // Phone number validation
+        const phoneRegex = /^(?:\+234|070|090|081|080|091)\d{9}$/;
+        if (!phoneRegex.test(phone)) {
+          const phoneError = document.createElement('p');
+          phoneError.textContent = 'Invalid phone number. It must start with +234, 070, 090, 081, 080, or 091.';
+          phoneError.classList.add('error-message');
+          phoneInput.parentNode.appendChild(phoneError);
+          errors = true;
         }
+
+        if (phone.startsWith('+234') && phone.length !== 13) {
+          const phoneLengthError = document.createElement('p');
+          phoneLengthError.textContent = 'If starting with +234, phone number must be 13 digits long.';
+          phoneLengthError.classList.add('error-message');
+          phoneInput.parentNode.appendChild(phoneLengthError);
+          errors = true;
+        } else if (!phone.startsWith('+234') && phone.length !== 11) {
+          const phoneLengthError = document.createElement('p');
+          phoneLengthError.textContent = 'Phone number must be 11 digits long.';
+          phoneLengthError.classList.add('error-message');
+          phoneInput.parentNode.appendChild(phoneLengthError);
+          errors = true;
+        }
+
+        // Confirm password validation
+        if (password !== confirmPassword) {
+          const confirmPasswordError = document.createElement('p');
+          confirmPasswordError.textContent = 'Passwords do not match.';
+          confirmPasswordError.classList.add('error-message');
+          confirmPasswordInput.parentNode.appendChild(confirmPasswordError);
+          errors = true;
+        }
+
+        if (errors) return;
 
         // Prepare API request
         const url = endpoints.register;
-        console.log(url)
         const body = {
           firstName,
           lastName,

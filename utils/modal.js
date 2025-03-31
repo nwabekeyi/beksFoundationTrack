@@ -65,7 +65,7 @@ export function createModal({ title, message, htmlContent, css, onConfirm, noCon
     closeButton.style.borderRadius = '5px';
     closeButton.textContent = '×';
     closeButton.style.background = 'none';
-    closeButton.style.fontSize = '1.5rem';
+    closeButton.style.fontSize = '1rem';
     closeButton.style.cursor = 'pointer';
     closeButton.style.color = '#fff';
     closeButton.style.padding = '0 5px';

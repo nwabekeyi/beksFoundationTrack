@@ -10,6 +10,11 @@ let currentSubitem = "";
 const userDetails = getSessionData("userDetails");
 const accessToken = localStorage.getItem("accessToken");
 
+// Ensure home page loads after login by checking accessToken
+if (accessToken && userDetails) {
+    loadWelcomePage(); // Force home page load if user is logged in
+}
+
 function saveCurrentTopicId(id) {
     localStorage.setItem("currentTopicId", id);
 }
@@ -72,7 +77,7 @@ function loadWelcomePage() {
     }
 
     if (homeItem) homeItem.addEventListener("click", loadWelcomePage);
-    if (statsItem) statsItem.addEventListener("click", loadStatsPage); // Fixed to call loadStatsPage
+    if (statsItem) statsItem.addEventListener("click", loadStatsPage);
     if (logoutItem) logoutItem.addEventListener("click", () => createModal({ title: "Confirm Logout", message: "Are you sure you want to logout?", onConfirm: handleLogout }));
     if (startLearningBtn) startLearningBtn.addEventListener("click", () => {
         if (userDetails.status === "active") {
@@ -197,7 +202,7 @@ function loadSubitem(lessonIndex, subitem) {
             const slideIndex = parseInt(subitem.split('-')[1]);
             updateContentSlide(lesson, slideIndex);
         } else {
-            lessonContent.innerHTML = `<p>This content is locked. Please complete the previous lessons to unlock this Lesoon.</p>`;
+            lessonContent.innerHTML = `<p>This content is locked. Please complete the previous lessons to unlock this Lesson.</p>`;
         }
     } else if (subitem === "video") {
         displayVideo(lesson);
@@ -461,6 +466,15 @@ function updateNavigationButtons(lessonIndex, subitem) {
             if (lessonIndex < lessons.length - 1) {
                 nextBtn.style.display = "block";
                 nextBtn.textContent = "Submit task";
+                if (lesson.id <= userDetails.lastTaskId) {
+                    nextBtn.onclick = () => createModal({
+                        title: "Task Already Completed",
+                        message: "You have already completed this task. Please move on to the next lesson.",
+                        noConfirm: true
+                    });
+                } else {
+                    nextBtn.onclick = () => document.getElementById("task-submission-form")?.dispatchEvent(new Event("submit"));
+                }
             }
         }
     }
@@ -554,6 +568,7 @@ function setupSettingsDropdown() {
             e.stopPropagation();
             settingsDropdown.style.display = settingsDropdown.style.display === "block" ? "none" : "block";
             console.log(settingsDropdown.style.display);
+
         });
 
         document.addEventListener("click", (e) => {
@@ -778,5 +793,4 @@ function loadStatsPage() {
 export {
     loadWelcomePage,
     setupSettingsDropdown,
-    loadStatsPage
 };
