@@ -182,6 +182,7 @@ const handleFormSubmissions = () => {
           const response = await apiRequest(url, 'POST', body, headers, 'Registration');
           console.log(response.message);
           registerForm.reset();
+          window.location.href = '../Login/index.html'; // Adjust redirect URL as needed
         } catch (error) {
           console.error('Registration failed:', error.message);
           showModal({
