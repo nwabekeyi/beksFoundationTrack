@@ -78,8 +78,7 @@ const handleFormSubmissions = () => {
     }
 
     // Registration form handling
-    const registerForm = document.querySelector('.register-form'); // Using querySelector as requested
-    console.log('Register form found:', registerForm);
+    const registerForm = document.querySelector('.register-form'); 
 
     if (registerForm) {
       // Extract token and email from URL search params
@@ -97,16 +96,29 @@ const handleFormSubmissions = () => {
       registerForm.addEventListener('submit', async (e) => {
         e.preventDefault();
 
-        // Get form values
-        const firstName = document.querySelector('#first-name').value;
-        const lastName = document.querySelector('#last-name').value;
-        const phone = document.querySelector('#phone').value;
+        // Get form input elements and their values
+        const firstNameInput = document.querySelector('#first-name');
+        const lastNameInput = document.querySelector('#last-name');
+        const phoneInput = document.querySelector('#phone');
+        const passwordInput = document.querySelector('#password');
+        const confirmPasswordInput = document.querySelector('#confirm-password');
+        const termsInput = document.querySelector('#terms');
+
+        const firstName = firstNameInput.value;
+        const lastName = lastNameInput.value;
+        const phone = phoneInput.value;
         const email = emailInput.value;
-        const password = document.querySelector('#password').value;
-        const confirmPassword = document.querySelector('#confirm-password').value;
-        const terms = document.querySelector('#terms').checked;
+        const password = passwordInput.value;
+        const confirmPassword = confirmPasswordInput.value;
+        const terms = termsInput.checked;
+
+        let errors = false;
 
         // Validation
+        // Clear previous errors
+        const errorMessages = document.querySelectorAll('.error-message');
+        errorMessages.forEach(msg => msg.remove());
+
         if (!firstName || !lastName || !phone || !email || !password || !confirmPassword || !terms) {
           showModal({
             title: 'Registration Error',
@@ -116,27 +128,54 @@ const handleFormSubmissions = () => {
           return;
         }
 
-        if (password !== confirmPassword) {
-          showModal({
-            title: 'Registration Error',
-            message: 'Passwords do not match.',
-            noConfirm: true
-          });
-          return;
+        // Password validation: Minimum 8 characters
+        if (password.length < 8) {
+          const passwordError = document.createElement('p');
+          passwordError.textContent = 'Password must be at least 8 characters long.';
+          passwordError.classList.add('error-message');
+          passwordInput.parentNode.appendChild(passwordError);
+          errors = true;
         }
 
-        if (!token) {
-          showModal({
-            title: 'Registration Error',
-            message: 'Registration token is missing. Please use a valid registration link.',
-            noConfirm: true
-          });
-          return;
+        // Phone number validation
+        // Updated regex: +234 followed by 10 digits OR 070/080/081/090/091 followed by 8 digits
+        const phoneRegex = /^(?:\+234\d{10}|(?:070|080|081|090|091)\d{8})$/;
+        if (!phoneRegex.test(phone)) {
+          const phoneError = document.createElement('p');
+          phoneError.textContent = 'Invalid phone number. Use +234 followed by 10 digits (e.g., +2348012345678) or 11 digits starting with 070, 080, 081, 090, or 091 (e.g., 07012345678).';
+          phoneError.classList.add('error-message');
+          phoneInput.parentNode.appendChild(phoneError);
+          errors = true;
+        } else {
+          // Additional length check for clarity
+          if (phone.startsWith('+234') && phone.length !== 14) {
+            const phoneLengthError = document.createElement('p');
+            phoneLengthError.textContent = 'Phone number with +234 must be 13 digits long (e.g., +2348012345678).';
+            phoneLengthError.classList.add('error-message');
+            phoneInput.parentNode.appendChild(phoneLengthError);
+            errors = true;
+          } else if (!phone.startsWith('+234') && phone.length !== 11) {
+            const phoneLengthError = document.createElement('p');
+            phoneLengthError.textContent = 'Phone number must be 11 digits long (e.g., 07012345678).';
+            phoneLengthError.classList.add('error-message');
+            phoneInput.parentNode.appendChild(phoneLengthError);
+            errors = true;
+          }
         }
+
+        // Confirm password validation
+        if (password !== confirmPassword) {
+          const confirmPasswordError = document.createElement('p');
+          confirmPasswordError.textContent = 'Passwords do not match.';
+          confirmPasswordError.classList.add('error-message');
+          confirmPasswordInput.parentNode.appendChild(confirmPasswordError);
+          errors = true;
+        }
+
+        if (errors) return;
 
         // Prepare API request
         const url = endpoints.register;
-        console.log(url)
         const body = {
           firstName,
           lastName,
@@ -152,10 +191,11 @@ const handleFormSubmissions = () => {
           const response = await apiRequest(url, 'POST', body, headers, 'Registration');
           console.log(response.message);
           registerForm.reset();
+          window.location.href = '../Login/index.html'; // Adjust redirect URL as needed
         } catch (error) {
           console.error('Registration failed:', error.message);
           showModal({
-            title: 'Registration Error',
+            title: 'Registration Error, please make sure you are using a valid registration link',
             message: error.message,
             noConfirm: true
           });

@@ -65,7 +65,7 @@ export function createModal({ title, message, htmlContent, css, onConfirm, noCon
     closeButton.style.borderRadius = '5px';
     closeButton.textContent = '×';
     closeButton.style.background = 'none';
-    closeButton.style.fontSize = '1.5rem';
+    closeButton.style.fontSize = '1rem';
     closeButton.style.cursor = 'pointer';
     closeButton.style.color = '#fff';
     closeButton.style.padding = '0 5px';
@@ -95,7 +95,7 @@ export function createModal({ title, message, htmlContent, css, onConfirm, noCon
         const yesButton = document.createElement('button');
         yesButton.textContent = 'Yes';
         yesButton.style.padding = '0.5rem 1.5rem';
-        yesButton.style.backgroundColor = '#007bff';
+        yesButton.style.backgroundColor = '#0e3b7a';
         yesButton.style.color = 'white';
         yesButton.style.border = 'none';
         yesButton.style.borderRadius = '4px';

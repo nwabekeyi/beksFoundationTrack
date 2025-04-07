@@ -7,9 +7,10 @@
 
 body {
     background: #f5f5f5; /* Fallback background */
-    height: 100vh;
+    height: auto;
     position: relative; /* Ensure positioning context for absolute children */
     overflow-x: hidden;
+    min-height: 100vh;
 }
 
 /* Background layer with static image */
@@ -67,7 +68,7 @@ body {
     padding: 20px;
     position: relative; /* Ensure content stays above background */
     z-index: 1;
-    height: 80%;
+    height: 83vh;
 }
 
 .registrationForm {
@@ -75,6 +76,9 @@ body {
 }
 
 .modal-content {
+    justify-content: center;
+    height: auto;
+    min-height: 70%;
     display: flex;
     width: 700px;
     border-radius: 15px;
@@ -139,7 +143,7 @@ body {
     display: flex;
     align-items: center;
     background-color: #fff;
-    padding: 30px;
+    padding: 30px 30px;
     flex: 1;
     justify-content: center;
     flex-direction: column !important;
@@ -241,10 +245,34 @@ footer a:hover {
         padding: 20px !important;
     }
 
+    footer{
+        font-size: 10px;
     }
+
+    .modal-content {
+        height: auto;
+        min-height: 30%;
+    }
+
+    }
+
+    @media (max-width: 800px) {
+
+        .checkbox-label span {
+            font-size: 0.6em;
+        }
+        .modal-right{
+            padding: 30px 10px;
+            justify-content: space-around;
+
+        }
+
+        }
 
 
 @media (max-width: 1040px) {
+
+    
 
     #register-from{
         width: 90%;
@@ -252,11 +280,11 @@ footer a:hover {
 
     .register-container{
         height: 75%;
-        padding: 20px 100px;
+        padding: 20px 5%;
     }
 
     .header-left{
-    padding: 5% 3% !important;
+    padding: 3% !important;
     }
 
   .modal-left{
@@ -275,13 +303,15 @@ footer a:hover {
   .modal-right h2 {
     font-size: medium !important;
   }
+
+  
     }
 
 
     @media (max-width: 1200px) {
 
         .register-container{
-            height: 75%;
+            height: 85vh;
         }
 
         #register-form{
@@ -289,3 +319,9 @@ footer a:hover {
         }
 
         }
+
+        .error-message {
+            color: red;
+            font-size: 12px;
+            margin-top: 5px;
+          }
