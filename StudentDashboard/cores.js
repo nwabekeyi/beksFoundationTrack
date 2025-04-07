@@ -28,7 +28,7 @@ function updateCourseProgressBar() {
         progressText.innerText = `${parseInt(progress)}%`;
         progressBar.value = progress;
     }
-};
+}
 
 // Load welcome page
 function loadWelcomePage() {
@@ -44,16 +44,20 @@ function loadWelcomePage() {
     }
 
     if (mainContent) {
+        const welcomeText = userDetails.status === "active" 
+            ? "Welcome back, we hope to see you grow as you learn with us" 
+            : "We're excited to have you on board. Ready to dive into your learning journey?";
+        
         const buttonText = userDetails.status === "active" ? "Continue Learning" : "Start Learning";
-        const welcomeText = userDetails.status === "active" ? "Welcome back, we hope to see you grow as you learn with us" : "We're excited to have you on board. Ready to dive into your learning journey?";
         const vsCodeText = userDetails.status === "not_started" ? `
-    <p>You'll need Visual Studio Code installed to get started with your lessons. <a href="https://code.visualstudio.com/download" target="_blank">Download it here</a> if you haven't already!</p>
-    <p>A code editor or IDE (Integrated Development Environment) is a tool that helps you write, edit, and test code efficiently. Think of it like a super-powered notepad for programming—it highlights syntax, catches errors, and often includes features like auto-completion and debugging to make coding easier. Visual Studio Code (VS Code) is a popular, lightweight code editor that supports many languages and extensions, letting you customize it for your needs.</p>
-    <p>Here’s a quick overview:</p>
-    <div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; max-width: 100%;">
-        <iframe src="/videos/vscode-explainer.mp4" frameborder="0" allowfullscreen style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"></iframe>
-    </div>
-` : '';
+            <p>You'll need Visual Studio Code installed to get started with your lessons. <a href="https://code.visualstudio.com/download" target="_blank">Download it here</a> if you haven't already!</p>
+            <p>A code editor or IDE (Integrated Development Environment) is a tool that helps you write, edit, and test code efficiently. Think of it like a super-powered notepad for programming—it highlights syntax, catches errors, and often includes features like auto-completion and debugging to make coding easier. Visual Studio Code (VS Code) is a popular, lightweight code editor that supports many languages and extensions, letting you customize it for your needs.</p>
+            <p>Here’s a quick overview:</p>
+            <div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; max-width: 100%;">
+                <iframe src="/videos/vscode-explainer.mp4" frameborder="0" allowfullscreen style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"></iframe>
+            </div>
+        ` : '';
+
         mainContent.innerHTML = `
             <div class="welcome-container">
                 <h2>Welcome, ${userDetails.firstName}!</h2>
@@ -79,15 +83,17 @@ function loadWelcomePage() {
     if (homeItem) homeItem.addEventListener("click", loadWelcomePage);
     if (statsItem) statsItem.addEventListener("click", loadStatsPage);
     if (logoutItem) logoutItem.addEventListener("click", () => createModal({ title: "Confirm Logout", message: "Are you sure you want to logout?", onConfirm: handleLogout }));
-    if (startLearningBtn) startLearningBtn.addEventListener("click", () => {
-        if (userDetails.status === "active") {
-            const currentLessonIndex = lessons.findIndex(lesson => lesson.id === userDetails.currentTopicId);
-            loadLessonsPage();
-            loadSubitem(currentLessonIndex !== -1 ? currentLessonIndex : 0, "content-0");
-        } else {
-            updateStartDate();
-        }
-    });
+    if (startLearningBtn) {
+        startLearningBtn.addEventListener("click", () => {
+            if (userDetails.status === "active") {
+                const currentLessonIndex = lessons.findIndex(lesson => lesson.id === userDetails.currentTopicId);
+                loadLessonsPage();
+                loadSubitem(currentLessonIndex !== -1 ? currentLessonIndex : 0, "content-0");
+            } else {
+                updateStartDate();
+            }
+        });
+    }
 }
 
 // Load all lessons 
@@ -275,16 +281,33 @@ function displayVideo(lesson) {
     `;
 }
 
-// Display tasks
+// Check if 12 hours have passed since last submission
+function canSubmitTask() {
+    const lastSubmissionTime = localStorage.getItem("lastTaskSubmissionTime");
+    if (!lastSubmissionTime) return true; // First submission
+
+    const lastTime = new Date(lastSubmissionTime);
+    const now = new Date();
+    const hoursDifference = (now - lastTime) / (1000 * 60 * 60); // Convert ms to hours
+    return hoursDifference >= 12;
+}
+
+// Display tasks with submission cooldown
 function displayTaskSubmission(lesson) {
     const lessonContent = document.getElementById("lesson-content");
     if (!lessonContent) return;
+
+    const canSubmit = canSubmitTask();
+    const cooldownMessage = !canSubmit ? `
+        <p style="color: #b22222; text-align: center;">You can submit a task again in 12 hours from your last submission.</p>
+    ` : '';
 
     lessonContent.innerHTML = `
         <div style="display: grid; grid-template-columns: 1fr; gap: 20px; max-width: 80%; margin: 0 auto; padding: 20px; background-color: #f9f9f9; border-radius: 8px; box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);">
             <h3 style="text-align: center; color: #333; margin-bottom: 20px;">Task Submission</h3>
             <p>${lesson.task}</p>
-            <form id="task-submission-form" style="display: flex; flex-direction: column; gap: 15px;">
+            ${cooldownMessage}
+            <form id="task-submission-form" style="display: flex; flex-direction: column; gap: 15px;" ${!canSubmit ? 'disabled' : ''}>
                 <div style="display: flex; justify-content: space-between; gap: 20px;">
                     <label style="flex: 1; display: flex; align-items: center; font-size: 14px; color: #555;">
                         <input type="radio" name="submission-type" value="file" checked style="margin-right: 8px;"> Upload Files (HTML required, CSS optional)
@@ -296,7 +319,7 @@ function displayTaskSubmission(lesson) {
                 <div id="submission-input">
                     <div id="dropzone-upload" class="dropzone" style="border: 2px dashed #007bff; border-radius: 8px; padding: 20px; background-color: #fff; text-align: center; color: #666;"></div>
                 </div>
-                <button type="submit" class="next-btn" style="background-color: #007bff; color: #fff; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer; font-size: 16px; transition: background-color 0.3s;">Submit</button>
+                <button type="submit" class="next-btn" style="background-color: #007bff; color: #fff; padding: 10px 20px; border: none; border-radius: 5px; cursor: ${canSubmit ? 'pointer' : 'not-allowed'}; font-size: 16px; transition: background-color 0.3s;" ${!canSubmit ? 'disabled' : ''}>Submit</button>
             </form>
         </div>
     `;
@@ -336,75 +359,97 @@ function displayTaskSubmission(lesson) {
         });
     });
 
-    form.addEventListener("submit", async (e) => {
-        e.preventDefault();
-        const submissionType = document.querySelector('input[name="submission-type"]:checked').value;
-    
-        let payload = {
-            query: null,
-            files: [],
-            criteria: lesson.criteria || "Evaluate the code based on correctness, structure, and best practices.",
-            userId: userDetails.id,
-            currentTopicId: lesson.id,
-            lastTaskId: userDetails.lastTaskId || 0,
-        };
-    
-        if (submissionType === "file") {
-            if (myDropzone.files.length === 0) {
-                alert("Please upload at least one HTML file.");
-                return;
-            }
-            payload.files = myDropzone.files.map((file) => ({
-                originalname: file.name,
-                buffer: file,
-            }));
-        } else {
-            const textSubmission = document.getElementById("text-submission")?.value;
-            if (!textSubmission) {
-                alert("Please enter some text to submit.");
-                return;
-            }
-            payload.query = textSubmission;
-        }
-    
-        const headers = {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${accessToken}`,
-        };
-    
-        try {
-            const response = await apiRequest(endpoints.submitTask, "POST", payload, headers, "Submit Task");
-    
-            if (response.updatedUser) {
-                sessionStorage.setItem("userDetails", JSON.stringify(response.updatedUser));
-                console.log('User updated in session storage');
-    
-                const currentIndex = lessons.findIndex((l) => l.id === lesson.id);
-                if (currentIndex < lessons.length - 1) {
-                    const nextLessonId = lessons[currentIndex + 1].id;
-                    saveCurrentTopicId(nextLessonId);
+    if (form && canSubmit) {
+        form.addEventListener("submit", async (e) => {
+            e.preventDefault();
+            const submissionType = document.querySelector('input[name="submission-type"]:checked').value;
+        
+            let payload = {
+                query: null,
+                files: [],
+                criteria: lesson.criteria || "Evaluate the code based on correctness, structure, and best practices.",
+                userId: userDetails.id,
+                currentTopicId: lesson.id,
+                lastTaskId: userDetails.lastTaskId || 0,
+            };
+        
+            if (submissionType === "file") {
+                if (myDropzone.files.length === 0) {
+                    alert("Please upload at least one HTML file.");
+                    return;
                 }
-    
-                createModal({
-                    title: "Submission Successful",
-                    message: `Passed!!!\n\nScore: ${response.score}\n\nGreat job! Let's move to the next topic.`,
-                    noConfirm: true,
-                });
-    
-                loadTopics(lessons);
-                loadSubitem(currentIndex, "task");
-    
+                payload.files = myDropzone.files.map((file) => ({
+                    originalname: file.name,
+                    buffer: file,
+                }));
             } else {
-                createModal({
-                    title: "Submission Failed",
-                    message: `Scored below average.\n\nScore: ${response.score}\n\nHint: ${response.hints}\n\nPlease try again.`,
-                    noConfirm: true,
-                });
+                const textSubmission = document.getElementById("text-submission")?.value;
+                if (!textSubmission) {
+                    alert("Please enter some text to submit.");
+                    return;
+                }
+                payload.query = textSubmission;
             }
-        } catch (error) {
-            console.error("Task submission failed:", error);
-        }
-    });
+        
+            const headers = {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${accessToken}`,
+            };
+        
+            try {
+                const response = await apiRequest(endpoints.submitTask, "POST", payload, headers, "Submit Task");
+        
+                // Store the submission time in local storage
+                const now = new Date().toISOString();
+                localStorage.setItem("lastTaskSubmissionTime", now);
+        
+                if (response.updatedUser) {
+                    sessionStorage.setItem("userDetails", JSON.stringify(response.updatedUser));
+                    console.log('User updated in session storage');
+        
+                    const currentIndex = lessons.findIndex((l) => l.id === lesson.id);
+                    if (currentIndex < lessons.length - 1) {
+                        const nextLessonId = lessons[currentIndex + 1].id;
+                        saveCurrentTopicId(nextLessonId);
+                    }
+        
+                    createModal({
+                        title: "Submission Successful",
+                        message: `Passed!!!\n\nScore: ${response.score}\n\nGreat job! Let's move to the next topic.`,
+                        noConfirm: true,
+                    });
+
+                    // Check score and enable the Next button if score >= 50
+                    if (response.score >= 50) {
+                        const nextBtn = document.querySelector('.actions .next-btn');
+                        if (nextBtn) {
+                            nextBtn.disabled = false; // Enable the button
+                            nextBtn.style.cursor = "pointer"; // Change cursor to pointer
+                            nextBtn.style.backgroundColor = "#007bff"; // Set active color
+                            nextBtn.textContent = "Next Topic"; // Update text
+                            nextBtn.onclick = () => {
+                                if (currentIndex + 1 < lessons.length) {
+                                    loadSubitem(currentIndex + 1, "content-0"); // Move to next topic
+                                }
+                            };
+                        }
+                    }
+        
+                    // Reload the task section to reflect updated state
+                    loadSubitem(currentIndex, "task");
+        
+                } else {
+                    createModal({
+                        title: "Submission Failed",
+                        message: `Scored below average.\n\nScore: ${response.score}\n\nHint: ${response.hints}\n\nPlease try again.`,
+                        noConfirm: true,
+                    });
+                }
+            } catch (error) {
+                console.error("Task submission failed:", error);
+            }
+        });
+    }
 }
 
 function highlightCurrentSubitem(lessonIndex, subitem) {
@@ -416,8 +461,9 @@ function highlightCurrentSubitem(lessonIndex, subitem) {
     });
 }
 
-// Update nav button
+// Update navigation buttons
 function updateNavigationButtons(lessonIndex, subitem) {
+    console.log(subitem)
     const prevBtn = document.querySelector(".prev-btn");
     const nextBtn = document.querySelector(".next-btn");
     const lesson = lessons[lessonIndex];
@@ -462,19 +508,25 @@ function updateNavigationButtons(lessonIndex, subitem) {
             prevBtn.style.display = "block";
             prevBtn.textContent = "Back to Video";
             prevBtn.onclick = () => loadSubitem(lessonIndex, "video");
+            console.log(lessonIndex)
+            console.log(currentTopicId)
 
-            if (lessonIndex < lessons.length - 1) {
+            if (currentTopicId <= lessonIndex + 1) {
+                const nextTopicBtn =  document.querySelector('.actions .next-btn');
+                nextTopicBtn.innerText = 'Next Topic'
                 nextBtn.style.display = "block";
-                nextBtn.textContent = "Submit task";
-                if (lesson.id <= userDetails.lastTaskId) {
-                    nextBtn.onclick = () => createModal({
-                        title: "Task Already Completed",
-                        message: "You have already completed this task. Please move on to the next lesson.",
+                nextBtn.textContent = "Submit";
+                const isDisabled = currentTopicId <= lesson.id;
+                nextTopicBtn.style.cursor = isDisabled ? "not-allowed" : "pointer";
+                nextTopicBtn.style.backgroundColor = isDisabled ? "#ccc" : "#007bff";
+                nextTopicBtn.disabled = isDisabled;
+                nextTopicBtn.onclick = isDisabled
+                    ? () => createModal({
+                        title: "Task Not Completed",
+                        message: "You must pass this task to unlock the next topic.",
                         noConfirm: true
-                    });
-                } else {
-                    nextBtn.onclick = () => document.getElementById("task-submission-form")?.dispatchEvent(new Event("submit"));
-                }
+                    })
+                    : () => loadSubitem(lessonIndex + 1, "content-0");
             }
         }
     }
@@ -564,11 +616,8 @@ function setupSettingsDropdown() {
     }
 
     if (settingsIcon && settingsDropdown) {
-        settingsIcon.addEventListener("click", (e) => {
-            e.stopPropagation();
+        settingsIcon.addEventListener("click", () => {
             settingsDropdown.style.display = settingsDropdown.style.display === "block" ? "none" : "block";
-            console.log(settingsDropdown.style.display);
-
         });
 
         document.addEventListener("click", (e) => {
