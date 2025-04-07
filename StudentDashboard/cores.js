@@ -49,20 +49,11 @@ function loadWelcomePage() {
             : "We're excited to have you on board. Ready to dive into your learning journey?";
         
         const buttonText = userDetails.status === "active" ? "Continue Learning" : "Start Learning";
-        const vsCodeText = userDetails.status === "not_started" ? `
-            <p>You'll need Visual Studio Code installed to get started with your lessons. <a href="https://code.visualstudio.com/download" target="_blank">Download it here</a> if you haven't already!</p>
-            <p>A code editor or IDE (Integrated Development Environment) is a tool that helps you write, edit, and test code efficiently. Think of it like a super-powered notepad for programming—it highlights syntax, catches errors, and often includes features like auto-completion and debugging to make coding easier. Visual Studio Code (VS Code) is a popular, lightweight code editor that supports many languages and extensions, letting you customize it for your needs.</p>
-            <p>Here’s a quick overview:</p>
-            <div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; max-width: 100%;">
-                <iframe src="/videos/vscode-explainer.mp4" frameborder="0" allowfullscreen style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"></iframe>
-            </div>
-        ` : '';
 
         mainContent.innerHTML = `
             <div class="welcome-container">
                 <h2>Welcome, ${userDetails.firstName}!</h2>
                 <p>${welcomeText}</p>
-                ${vsCodeText}
                 <img src="../assets/welcomeBg.png" />
                 <button id="start-learning-btn" class="next-btn">${buttonText}</button>
             </div>
@@ -89,9 +80,34 @@ function loadWelcomePage() {
                 const currentLessonIndex = lessons.findIndex(lesson => lesson.id === userDetails.currentTopicId);
                 loadLessonsPage();
                 loadSubitem(currentLessonIndex !== -1 ? currentLessonIndex : 0, "content-0");
-            } else {
-                updateStartDate();
+            } else if (userDetails.status === "not_started") {
+                showVSCodeIntroVideo(); // Show video for new users
             }
+        });
+    }
+}
+
+// Show VS Code intro video for new users
+function showVSCodeIntroVideo() {
+    const mainContent = document.getElementById("main-content");
+    if (!mainContent) return;
+
+    mainContent.innerHTML = `
+        <div class="welcome-container">
+            <h2>Getting Started with Visual Studio Code</h2>
+            <p>You'll need Visual Studio Code installed to get started with your lessons. <a href="https://code.visualstudio.com/download" target="_blank">Download it here</a> if you haven't already!</p>
+            <p>Watch this short video to learn the basics of VS Code:</p>
+            <div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; max-width: 100%;">
+                <iframe src="https://www.youtube.com/embed/VqCgcpAypFQ" frameborder="0" allowfullscreen style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"></iframe>
+            </div>
+            <button id="begin-lessons-btn" class="next-btn">Begin Lessons</button>
+        </div>
+    `;
+
+    const beginLessonsBtn = document.getElementById("begin-lessons-btn");
+    if (beginLessonsBtn) {
+        beginLessonsBtn.addEventListener("click", () => {
+            updateStartDate(); // Update status and proceed to lessons
         });
     }
 }
@@ -399,7 +415,6 @@ function displayTaskSubmission(lesson) {
             try {
                 const response = await apiRequest(endpoints.submitTask, "POST", payload, headers, "Submit Task");
         
-                // Store the submission time in local storage
                 const now = new Date().toISOString();
                 localStorage.setItem("lastTaskSubmissionTime", now);
         
@@ -419,23 +434,21 @@ function displayTaskSubmission(lesson) {
                         noConfirm: true,
                     });
 
-                    // Check score and enable the Next button if score >= 50
                     if (response.score >= 50) {
                         const nextBtn = document.querySelector('.actions .next-btn');
                         if (nextBtn) {
-                            nextBtn.disabled = false; // Enable the button
-                            nextBtn.style.cursor = "pointer"; // Change cursor to pointer
-                            nextBtn.style.backgroundColor = "#007bff"; // Set active color
-                            nextBtn.textContent = "Next Topic"; // Update text
+                            nextBtn.disabled = false;
+                            nextBtn.style.cursor = "pointer";
+                            nextBtn.style.backgroundColor = "#007bff";
+                            nextBtn.textContent = "Next Topic";
                             nextBtn.onclick = () => {
                                 if (currentIndex + 1 < lessons.length) {
-                                    loadSubitem(currentIndex + 1, "content-0"); // Move to next topic
+                                    loadSubitem(currentIndex + 1, "content-0");
                                 }
                             };
                         }
                     }
         
-                    // Reload the task section to reflect updated state
                     loadSubitem(currentIndex, "task");
         
                 } else {
@@ -463,7 +476,6 @@ function highlightCurrentSubitem(lessonIndex, subitem) {
 
 // Update navigation buttons
 function updateNavigationButtons(lessonIndex, subitem) {
-    console.log(subitem)
     const prevBtn = document.querySelector(".prev-btn");
     const nextBtn = document.querySelector(".next-btn");
     const lesson = lessons[lessonIndex];
@@ -508,19 +520,15 @@ function updateNavigationButtons(lessonIndex, subitem) {
             prevBtn.style.display = "block";
             prevBtn.textContent = "Back to Video";
             prevBtn.onclick = () => loadSubitem(lessonIndex, "video");
-            console.log(lessonIndex)
-            console.log(currentTopicId)
 
             if (currentTopicId <= lessonIndex + 1) {
-                const nextTopicBtn =  document.querySelector('.actions .next-btn');
-                nextTopicBtn.innerText = 'Next Topic'
                 nextBtn.style.display = "block";
                 nextBtn.textContent = "Submit";
                 const isDisabled = currentTopicId <= lesson.id;
-                nextTopicBtn.style.cursor = isDisabled ? "not-allowed" : "pointer";
-                nextTopicBtn.style.backgroundColor = isDisabled ? "#ccc" : "#007bff";
-                nextTopicBtn.disabled = isDisabled;
-                nextTopicBtn.onclick = isDisabled
+                nextBtn.style.cursor = isDisabled ? "not-allowed" : "pointer";
+                nextBtn.style.backgroundColor = isDisabled ? "#ccc" : "#007bff";
+                nextBtn.disabled = isDisabled;
+                nextBtn.onclick = isDisabled
                     ? () => createModal({
                         title: "Task Not Completed",
                         message: "You must pass this task to unlock the next topic.",
@@ -557,6 +565,7 @@ async function updateStartDate() {
         if (response.userId) {
             const updatedUser = { ...userDetails, status: "active" };
             sessionStorage.setItem("userDetails", JSON.stringify(updatedUser));
+            userDetails.status = "active"; // Update local userDetails object
         }
         loadLessonsPage();
         loadSubitem(0, "content-0");
@@ -594,7 +603,7 @@ function setupSettingsDropdown() {
                 <li class="settings-option" id="app-settings" style="padding: 12px 16px; cursor: pointer; display: flex; align-items: center; background-color: #f5f5f5; color: #333; transition: background-color 0.2s;">
                     <iconify-icon icon="mdi:cog" style="margin-right: 10px; font-size: 20px; color: #333;"></iconify-icon> App Settings
                 </li>
-                <li class="settings-option" id="reset-password" style="padding: 12px 16px; cursor: pointer; display: flex; align-items: center; background-color: #fff0f0; color: #b22222; transition: background-color 0.2s;">
+                <li class="settings-option" idjp="reset-password" style="padding: 12px 16px; cursor: pointer; display: flex; align-items: center; background-color: #fff0f0; color: #b22222; transition: background-color 0.2s;">
                     <iconify-icon icon="mdi:lock-reset" style="margin-right: 10px; font-size: 20px; color: #b22222;"></iconify-icon> Reset Password
                 </li>
             </ul>
@@ -719,7 +728,6 @@ function loadStatsPage() {
     const mainContent = document.getElementById("main-content");
     if (!mainContent) return;
 
-    // Calculate stats
     const completedLessons = userDetails.currentTopicId;
     const totalLessons = lessons.length;
     const progressPercentage = (completedLessons / totalLessons) * 100;
@@ -754,7 +762,6 @@ function loadStatsPage() {
         </div>
     `;
 
-    // Lessons Progress Chart (Bar)
     const lessonsCtx = document.getElementById("lessonsChart").getContext("2d");
     new Chart(lessonsCtx, {
         type: "bar",
@@ -776,7 +783,6 @@ function loadStatsPage() {
         }
     });
 
-    // Total Score Chart (Bar)
     const totalScoreCtx = document.getElementById("totalScoreChart").getContext("2d");
     new Chart(totalScoreCtx, {
         type: "bar",
@@ -798,7 +804,6 @@ function loadStatsPage() {
         }
     });
 
-    // Average Score Chart (Bar)
     const averageScoreCtx = document.getElementById("averageScoreChart").getContext("2d");
     new Chart(averageScoreCtx, {
         type: "bar",
@@ -820,7 +825,6 @@ function loadStatsPage() {
         }
     });
 
-    // Progress Chart (Doughnut)
     const progressCtx = document.getElementById("progressChart").getContext("2d");
     new Chart(progressCtx, {
         type: "doughnut",

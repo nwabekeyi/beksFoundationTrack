@@ -437,6 +437,10 @@ progress::-moz-progress-bar {
 #reset-password{
     margin-bottom: 0;
 }
+
+#begin-lessons-btn{
+    margin-top: 10px;
+}
 /* .s
 media queries */
 @media (max-width: 1200px) {
